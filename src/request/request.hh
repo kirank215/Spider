@@ -24,7 +24,7 @@ namespace http
         ~Request() = default;
         // Add members to store the information relative to a request.
         method m;
-        std::string r;
+        std::string request_uri;
         std::map<std::string, std::string> headers;
         std::string msg_body;
     };

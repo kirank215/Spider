@@ -21,3 +21,7 @@ Implement responses [X]
 --- SSL Termination [X]
 
 --- Authentication [X]
+
+---EventWatcher : need to handle the differents classes of events
+override the functors, in EventRequest create a request, and treat it
+in EventResponse handle the answer
