@@ -38,6 +38,7 @@ libspider_la_SOURCES = \
                        src/events/event-loop.cc \
                        src/events/events.cc \
                        src/events/events.hh \
+                       src/events/listener.cc \
                        src/events/listener.hh \
                        src/events/register.hh \
                        src/events/register.hxx \
