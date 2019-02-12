@@ -1,0 +1,18 @@
+V : Finished
+O : Ongoing
+T : To be tested
+X : Not started
+
+--- Configuration file handling [X]
+
+--- Event Loop [X]
+
+--- Implementing Vhosts [X]
+
+--- Reverse Proxy [X]
+
+--- SSL Termination [X]
+
+--- Authentication [X]
+
+--- 
