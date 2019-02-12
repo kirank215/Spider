@@ -7,7 +7,7 @@
 
 #include "request/request.hh"
 #include "request/types.hh"
-
+#include <map>
 namespace http
 {
     /**
@@ -25,6 +25,9 @@ namespace http
         Response(Response&&) = default;
         Response& operator=(Response&&) = default;
         ~Response() = default;
-        // FIXME: Add members to store the information relative to a response.
+        // Add members to store the information relative to a response.
+        STATUS_CODE status;
+        std::map<std::string, std::string> headers;
+        std::string msg_body;
     };
 } // namespace http
