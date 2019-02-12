@@ -35,6 +35,7 @@ libspider_la_SOURCES = \
                        src/config/config.hh \
                        src/error/not-implemented.hh \
                        src/events/event-loop.hh \
+                       src/events/event-loop.cc \
                        src/events/events.cc \
                        src/events/events.hh \
                        src/events/listener.hh \
