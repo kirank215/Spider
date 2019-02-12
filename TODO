@@ -5,10 +5,10 @@ X : Not started
 
 Priority :
 
-Implement event loop.
-Implement listener.
-Implement requests.
-Implement responses.
+Implement event loop [T]
+Implement listener [X]
+Implement requests [X]
+Implement responses [X]
 
 --- Configuration file handling [X]
 
