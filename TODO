@@ -10,6 +10,12 @@ Implement listener [O] - l.n
 Implement requests [O] - s.d
 Implement responses [X]
 
+Implement listener [O]
+{
+    Implement EventWatcher to parse requests [X]
+    Implement EventWatcher for all requests [X]
+}
+
 --- Configuration file handling [X]
 
 --- Event Loop [X]
