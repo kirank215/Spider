@@ -6,8 +6,8 @@ X : Not started
 Priority :
 
 Implement event loop [T]
-Implement listener [X]
-Implement requests [X]
+Implement listener [O] - l.n
+Implement requests [O] - s.d
 Implement responses [X]
 
 --- Configuration file handling [X]
