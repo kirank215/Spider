@@ -1,6 +1,6 @@
 #include "event-loop.hh"
 
-http::EventLoop::Eventloop()
+http::EventLoop::EventLoop()
 {
     loop = EV_DEFAULT;
 }
@@ -14,10 +14,15 @@ http::EventLoop::~EventLoop()
 // ADD ERROR HANDLING ?
 void http::EventLoop::register_watcher(EventWatcher* event)
 {
-    ev_io_start(loop, event);
+    ev_io_start(loop, &event->watcher_get());
 }
 
 void http::EventLoop::unregister_watcher(EventWatcher* event)
 {
-    ev_io_stop(loop, event);
+    ev_io_stop(loop, &event->watcher_get());
+}
+
+void http::EventLoop::register_sigint_watcher(ev_signal* sig) const
+{
+    ev_signal_start(loop, sig);
 }
