@@ -1,3 +1,11 @@
 Makefile*
 *.lo
-m4
+*.o
+*.in
+.d*
+*m4*
+spider
+lib*
+config*
+stamp*
+build*
