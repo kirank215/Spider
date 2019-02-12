@@ -3,6 +3,13 @@ O : Ongoing
 T : To be tested
 X : Not started
 
+Priority :
+
+Implement event loop.
+Implement listener.
+Implement requests.
+Implement responses.
+
 --- Configuration file handling [X]
 
 --- Event Loop [X]
@@ -14,5 +21,3 @@ X : Not started
 --- SSL Termination [X]
 
 --- Authentication [X]
-
---- 
