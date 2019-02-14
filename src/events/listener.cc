@@ -27,6 +27,6 @@ void http::ListenerEW::operator()()
     socklen_t len = sizeof(addr);
     auto new_socket = sock_->accept(&addr, &len);
 
-    // http::event_register.register_ew(new_socket);
     // Add to loop
+    http::event_register.register_ew(new_socket);
 }
