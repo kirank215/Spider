@@ -3,16 +3,22 @@
 
 using namespace http;
 
-class EventRequest
+class EventRequest : public EventWatcher
 {
+    EventRequest(shared_socket s);
+    ~EventRequest();
     void operator()() override;
     private :
+    shared_socket s;
     request req;
 };
 
-class EventResponse
+class EventResponse : public EventWatcher
 {
+    EventResponse(shared_socket s, request req);
+    ~EventResponse();
     void operator()() override;
     private :
+    shared_socket s;
     response res;
 };
