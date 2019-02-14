@@ -54,7 +54,8 @@ libspider_la_SOURCES = \
                        src/misc/unistd.hh \
                        src/request/error.cc \
                        src/request/error.hh \
-                       src/request/request.hh \
+                       src/request/request.hh\
+		       src/request/request.cc\
                        src/request/response.hh \
                        src/request/types.hh \
                        src/socket/default-socket.cc \
