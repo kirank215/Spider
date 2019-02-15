@@ -36,5 +36,6 @@ namespace http
         std::map<std::string, std::string> headers_;
         int msg_body_len_;
         std::string msg_body_;
+        STATUS_CODE status;
     };
 } // namespace http
