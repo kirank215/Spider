@@ -63,11 +63,16 @@ namespace http
         Response& operator=(Response&&) = default;
         ~Response() = default;
 
+        void build_head();
+        void build_get();
+        void build_post();
+        int check_headers() const;
+        int check_list(const std::string& header,
+                       const std::list<std::string>& list) const;
+
         // Add members to store the information relative to a response.
-        STATUS_CODE status;
-        std::map<std::string, std::string> headers;
-        std::string msg_body;
+        STATUS_CODE status_;
+        std::map<std::string, std::string> headers_;
+        std::string msg_body_;
     };
-    int check_headers(std::map<std::string, std::string> headers);
-    int check_list(std::string header, std::list<std::string> list);
 } // namespace http

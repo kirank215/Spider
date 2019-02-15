@@ -1,13 +1,17 @@
 #include "response.hh"
 
+#include <chrono>
+#include <ctime>
+
 http::Response::Response(const STATUS_CODE& st)
-    : status(st)
+    : status_(st)
 {
-    headers = std::map<std::string, std::string>();
-    msg_body = "";
+    headers_ = std::map<std::string, std::string>();
+    msg_body_ = "";
 }
 
-int http::check_list(std::string header, std::list<std::string> list)
+int http::Response::check_list(const std::string& header,
+                               const std::list<std::string>& list) const
 {
     for (auto it = list.begin(); it != list.end(); ++it)
     {
@@ -16,37 +20,66 @@ int http::check_list(std::string header, std::list<std::string> list)
     }
     return 0;
 }
-int http::check_headers(std::map<std::string, std::string> map)
+
+int http::Response::check_headers() const
 {
-    for (auto it = map.begin(); it != map.end(); ++it)
+    for (auto it = headers_.begin(); it != headers_.end(); ++it)
     {
         if (check_list(it->first, http::General_H))
-        {
             continue;
-        }
         if (check_list(it->first, http::Request_H))
-        {
             continue;
-        }
         if (check_list(it->first, http::Entity_H))
-        {
             continue;
-        }
         return 0;
     }
     return 1;
 }
-http::Response::Response(const Request& request, const STATUS_CODE& st)
-    : status(st)
+
+void http::Response::build_head()
 {
-    if (request.m == BAD) // Got a bad method.
-        status = BAD_REQUEST;
+    msg_body_ = "";
+    auto time =
+        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    headers_.emplace("Date", std::ctime(&time));
+    headers_.emplace("Content-Length", "0");
+}
+
+// TO FIX : ADD A PROPER MESSAGE BODY
+void http::Response::build_get()
+{
+    msg_body_ = "";
+    auto time =
+        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    headers_.emplace("Date", std::ctime(&time));
+    headers_.emplace("Content-Length", "0");
+}
+
+void http::Response::build_post()
+{
+    msg_body_ = "";
+    auto time =
+        std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    headers_.emplace("Date", std::ctime(&time));
+    headers_.emplace("Content-Length", "0");
+}
+
+http::Response::Response(const Request& request, const STATUS_CODE& st)
+    : status_(st)
+{
+    if (request.m_ == BAD) // Got a bad method.
+        status_ = BAD_REQUEST;
+    if (!check_headers())
+        status_ = BAD_REQUEST;
     else
     {
-        if (!check_headers)
-        {
-        }
-        headers = request.headers;
-        msg_body = request.msg_body;
+        if (request.m_ == HEAD)
+            build_head();
+        if (request.m_ == GET)
+            build_get();
+        if (request.m_ == POST)
+            build_post();
+        headers_ = request.headers_;
+        msg_body_ = request.msg_body_;
     }
 }
