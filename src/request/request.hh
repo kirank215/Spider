@@ -4,24 +4,32 @@
  */
 
 #pragma once
+#include <algorithm>
+#include <iostream>
+#include <map>
+#include <string>
+
+#include "events/watcher.hh"
+#include "misc/sys-wrapper.hh"
 #include "socket/socket.hh"
 #include "types.hh"
-#include "misc/sys-wrapper.hh"
-#include <string>
-#include <algorithm>
-#include <map>
-#include <iostream>
 namespace http
 {
     /**
      * \struct Request
      * \brief Value object representing a request.
      */
-    enum method { GET, POST, HEAD, BAD};
+    enum method
+    {
+        GET,
+        POST,
+        HEAD,
+        BAD
+    };
     struct Request
     {
         Request() = default;
-        Request(shared_socket new_socket);
+        Request(shared_socket);
         Request(const Request&) = default;
         Request& operator=(const Request&) = default;
         Request(Request&&) = default;
@@ -34,6 +42,5 @@ namespace http
         std::map<std::string, std::string> headers_;
         int msg_body_len_;
         std::string msg_body_;
-        STATUS_CODE status;
     };
 } // namespace http
