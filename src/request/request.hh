@@ -9,7 +9,6 @@
 #include <map>
 #include <string>
 
-#include "events/watcher.hh"
 #include "misc/sys-wrapper.hh"
 #include "socket/socket.hh"
 #include "types.hh"
