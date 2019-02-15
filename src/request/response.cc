@@ -7,7 +7,7 @@ http::Response::Response(const STATUS_CODE& st)
     msg_body = "";
 }
 
-int check_list(std::string header, std::list<std::string> list)
+int http::check_list(std::string header, std::list<std::string> list)
 {
     for (auto it = list.begin(); it != list.end(); ++it)
     {
@@ -16,19 +16,19 @@ int check_list(std::string header, std::list<std::string> list)
     }
     return 0;
 }
-int check_headers(std::map<std::string, std::string> headers)
+int http::check_headers(std::map<std::string, std::string> map)
 {
     for (auto it = map.begin(); it != map.end(); ++it)
     {
-        if (check_list(it->first, General))
+        if (check_list(it->first, http::General_H))
         {
             continue;
         }
-        if (check_list(it->first, Request))
+        if (check_list(it->first, http::Request_H))
         {
             continue;
         }
-        if (check_list(it->first, Entity))
+        if (check_list(it->first, http::Entity_H))
         {
             continue;
         }
@@ -36,13 +36,11 @@ int check_headers(std::map<std::string, std::string> headers)
     }
     return 1;
 }
-http::Response::Response(const Request& request,
-                         const STATUS_CODE& st = STATUS_CODE::OK)
+http::Response::Response(const Request& request, const STATUS_CODE& st)
     : status(st)
 {
-    if (request.method != "GET" || request.method != "POST"
-        || request.method != "HEAD")
-        status = 400;
+    if (request.m == BAD) // Got a bad method.
+        status = BAD_REQUEST;
     else
     {
         if (!check_headers)
