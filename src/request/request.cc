@@ -30,49 +30,55 @@ namespace http
             throw std::logic_error("Parsing error in Request");
     }
 
-    Request::Request(const std::string buffer)
+    Request::Request(const std::string buffer/*Socket new_socket*/)
     {
-        /*  std::string buffer (4096, 0); //Ususally buffer lenght is 8kb
-            auto check = recv(new_socket, buffer, 4096, 0); // 0 is a flag
-            if (check < 0)
+       /* std::string buffer (4096, 0); //Ususally buffer lenght is 8kb
+        auto check = recv(new_socket, buffer, 4096, 0); // 0 is a flag
+        if (check < 0)
             std::cout << "Error reading the request";
-            else
-            {*/
-        std::string type = "";
-        std::string body = "";
-        int i = 0;
-        int len = buffer.length();
-        m_ = method_type(get_token(i, " ", buffer));
-        request_uri_ = get_token(i, " ", buffer);
-        version_ = get_token(i, http_crlf, buffer);
-        msg_body_len_ = 0;
-        while(1)
-        {
-            i++;
-            type = get_token(i, ":", buffer);
-            body = get_token(i, http_crlf, buffer);
-            if(type.compare("Content-Length") == 0)
+        else
+        {*/
+            std::string type = "";
+            std::string body = "";
+            int i = 0;
+            int len = buffer.length();
+            m_ = method_type(get_token(i, " ", buffer));
+            request_uri_ = get_token(i, " ", buffer);
+            version_ = get_token(i, http_crlf, buffer);
+            msg_body_len_ = 0;
+            while(1)
             {
-                msg_body_len_ = stoi(body);
-            }
-            headers_.emplace(type, body);
-            if(i+2 < len)
-            {
-                if(buffer[i+1] == '\r' && buffer[i+2] == '\n')
+                i++;
+                type = get_token(i, ":", buffer);
+                body = get_token(i, http_crlf, buffer);
+                if(type.compare("Content-Length") == 0)
                 {
-                    i = i+3;
-                    break;
+                    msg_body_len_ = stoi(body);
                 }
+                headers_.emplace(type, body);
+                if(i+2 < len)
+                {
+                    if(buffer[i+1] == '\r' && buffer[i+2] == '\n')
+                    {
+                        i = i+3;
+                        break;
+                    }
+                }
+                else
+                    break;
             }
-            else
-                break;
-        }
-        int max = i + msg_body_len_;
-        while(i <= max)
-        {
-            msg_body_.push_back(buffer[i]);
-            i++;
-        }
+            if(headers_.find("Host") == headers_.end())
+            {
+                throw std::logic_error("No Host provided");
+            }
+            auto it = headers_.find("Connection");  // Remove this block
+            it->second = "close";                    // in later parts
+            int max = i + msg_body_len_;
+            while(i <= max && i <= len)
+            {
+                msg_body_.push_back(buffer[i]);
+                i++;
+            }
         //}
     }
 }
