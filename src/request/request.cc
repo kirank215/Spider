@@ -33,8 +33,9 @@ namespace http
 
     Request::Request(shared_socket new_socket)
     {
-       std::string buffer (4096, 0); //Ususally buffer lenght is 8kb
+        char buffer[4096]; //Ususally buffer lenght is 8kb
         auto check = recv(new_socket->fd_get()->fd_, buffer, 4096, 0); // 0 is a flag
+        int max = 0;
         if (check < 0)
             std::cout << "Error reading the request";
         else
@@ -42,7 +43,7 @@ namespace http
             std::string type = "";
             std::string body = "";
             int i = 0;
-            int len = buffer.length();
+            int len = sizeof(buffer);
             m_ = method_type(get_token(i, " ", buffer));
             request_uri_ = get_token(i, " ", buffer);
             version_ = get_token(i, http_crlf, buffer);
@@ -74,7 +75,7 @@ namespace http
             }
             auto it = headers_.find("Connection");  // Remove this block
             it->second = "close";                    // in later parts
-            int max = i + msg_body_len_;
+            max = i + msg_body_len_;
             while(i <= max && i <= len)
             {
                 msg_body_.push_back(buffer[i]);
