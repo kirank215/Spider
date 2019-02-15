@@ -1,5 +1,6 @@
 #include "request.hh"
 
+
 namespace http
 {
     static method method_type(std::string str)
@@ -33,7 +34,7 @@ namespace http
     Request::Request(shared_socket new_socket)
     {
        std::string buffer (4096, 0); //Ususally buffer lenght is 8kb
-        auto check = recv(new_socket, buffer, 4096, 0); // 0 is a flag
+        auto check = recv(new_socket->fd_get()->fd_, buffer, 4096, 0); // 0 is a flag
         if (check < 0)
             std::cout << "Error reading the request";
         else

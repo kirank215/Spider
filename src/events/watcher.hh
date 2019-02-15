@@ -1,5 +1,8 @@
 #pragma once
 #include "events.hh"
+#include "request/request.hh"
+#include "request/response.hh"
+#include "socket/socket.hh"
 
 using namespace http;
 
@@ -10,15 +13,15 @@ class EventRequest : public EventWatcher
     void operator()() override;
     private :
     shared_socket s;
-    request req;
+    Request req;
 };
 
 class EventResponse : public EventWatcher
 {
-    EventResponse(shared_socket s, request req);
+    EventResponse(shared_socket s, Request req);
     ~EventResponse();
     void operator()() override;
     private :
     shared_socket s;
-    response res;
+    Response res;
 };

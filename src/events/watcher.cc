@@ -5,7 +5,7 @@
 #include <netinet/in.h>
 
 #include "events/register.hh"
-#include "misc/socket.hh"
+#include "socket/socket.hh"
 
 using namespace http;
 
@@ -15,16 +15,15 @@ EventRequest::EventRequest(shared_socket sock)
     s = sock;
 }
 
-EventResponse::EventResponse(shared_socket sock, request req)
+EventResponse::EventResponse(shared_socket sock, Request req)
 {
     EventWatcher::EventWatcher(s->fd_get(), EV_WRITE);
     s = sock;
-    res = new response;
 }
 
 EventRequest::operator()()
 {
-    req = request(s);
+    req = Request(s);
     EventResponse er = EventResponse(s, req);
     //add to the register of sockets
 

@@ -4,10 +4,9 @@
  */
 
 #pragma once
-
+#include "socket/socket.hh"
 #include "types.hh"
-#include "../misc/sys-wrapper.hh"
-#include "../events/watcher.hh"
+#include "misc/sys-wrapper.hh"
 #include <string>
 #include <algorithm>
 #include <map>
@@ -30,7 +29,6 @@ namespace http
         ~Request() = default;
         // Add members to store the information relative to a request.
         method m_;
-        STATUS_CODE status;
         std::string request_uri_;
         std::string version_;
         std::map<std::string, std::string> headers_;

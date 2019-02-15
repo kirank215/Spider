@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include "request/request.hh"
-#include "request/types.hh"
+#include "request.hh"
+#include "types.hh"
 #include <map>
 namespace http
 {
