@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <sys/socket.h>
-
+#include <sys/types.h>
 #include "misc/fd.hh"
 
 namespace http
