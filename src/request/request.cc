@@ -11,7 +11,7 @@ namespace http
         else if(str.compare("HEAD") == 0)
             return HEAD;
         else
-            throw std::logic_error("unknown method_type");
+            return BAD;
     }
 
     static std::string get_token(int& pos, std::string delim,

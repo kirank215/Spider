@@ -18,7 +18,7 @@ namespace http
      * \struct Request
      * \brief Value object representing a request.
      */
-    enum method { GET, POST, HEAD };
+    enum method { GET, POST, HEAD, BAD};
     struct Request
     {
         Request() = default;
