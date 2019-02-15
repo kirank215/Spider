@@ -24,13 +24,9 @@ EventResponse::EventResponse(shared_socket sock, request req)
 
 EventRequest::operator()()
 {
-    req = request();
+    req = request(s);
     EventResponse er = EventResponse(s, req);
-    //add to the list register thing
-    sockaddr addr;
-    r = bind(s->fd_get()->fd_, addr);
-    socklen_t len = sizeof(addr);
-    auto new_socket = sock_->accept(&addr, &len);
+    //add to the register of sockets
+
     event_register.register_ew(s);
-    event_register.register_ew(new_socket);
 }
