@@ -11,11 +11,9 @@ using namespace http;
 
 EventRequest::EventRequest(shared_socket sock)
 {
-    EventWatcher::EventWatcher(s->fd_get(), EV_READ);
+    EventWatcher::EventWatcher(s->fd_get()->fd_, EV_READ);
     s = sock;
-    req = new request;
 }
-
 
 EventResponse::EventResponse(shared_socket sock, request req)
 {
@@ -26,15 +24,13 @@ EventResponse::EventResponse(shared_socket sock, request req)
 
 EventRequest::operator()()
 {
-    ssize_t c;
-    while(c != -1)
-    {
-
-        c = read(fd);
-    }
-}
-
-EventResponse::operator()()
-{
-
+    req = request();
+    EventResponse er = EventResponse(s, req);
+    //add to the list register thing
+    sockaddr addr;
+    r = bind(s->fd_get()->fd_, addr);
+    socklen_t len = sizeof(addr);
+    auto new_socket = sock_->accept(&addr, &len);
+    event_register.register_ew(s);
+    event_register.register_ew(new_socket);
 }
