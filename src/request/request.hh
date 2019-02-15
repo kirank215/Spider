@@ -7,9 +7,11 @@
 
 #include "types.hh"
 #include "../misc/sys-wrapper.hh"
+#include "../events/watcher.hh"
 #include <string>
 #include <algorithm>
 #include <map>
+#include <iostream>
 namespace http
 {
     /**
@@ -20,7 +22,7 @@ namespace http
     struct Request
     {
         Request() = default;
-        Request(const std::string buffer); //Handle scoket initialization before
+        Request(shared_socket new_socket);
         Request(const Request&) = default;
         Request& operator=(const Request&) = default;
         Request(Request&&) = default;

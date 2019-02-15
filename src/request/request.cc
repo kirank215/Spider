@@ -30,14 +30,14 @@ namespace http
             throw std::logic_error("Parsing error in Request");
     }
 
-    Request::Request(const std::string buffer/*Socket new_socket*/)
+    Request::Request(shared_socket new_socket)
     {
-       /* std::string buffer (4096, 0); //Ususally buffer lenght is 8kb
+       std::string buffer (4096, 0); //Ususally buffer lenght is 8kb
         auto check = recv(new_socket, buffer, 4096, 0); // 0 is a flag
         if (check < 0)
             std::cout << "Error reading the request";
         else
-        {*/
+        {
             std::string type = "";
             std::string body = "";
             int i = 0;
@@ -79,6 +79,6 @@ namespace http
                 msg_body_.push_back(buffer[i]);
                 i++;
             }
-        //}
+        }
     }
 }
