@@ -6,9 +6,9 @@
 #pragma once
 
 #include <memory>
-#include <sys/socket.h>
-#include <sys/types.h>
 #include "misc/fd.hh"
+#include "misc/socket.hh"
+
 
 namespace http
 {
