@@ -57,6 +57,7 @@ libspider_la_SOURCES = \
                        src/request/request.hh\
 		       src/request/request.cc\
                        src/request/response.hh \
+                       src/request/response.cc \
                        src/request/types.hh \
                        src/socket/default-socket.cc \
                        src/socket/default-socket.hh \
