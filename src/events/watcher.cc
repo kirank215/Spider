@@ -24,8 +24,7 @@ EventResponse::EventResponse(shared_socket sock, Request req)
 EventRequest::operator()()
 {
     req = Request(s);
-    EventResponse er = EventResponse(s, req);
     //add to the register of sockets
 
-    event_register.register_ew(s);
+    event_register.register_ew<EventResponse>(s, req);
 }

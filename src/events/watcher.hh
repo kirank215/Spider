@@ -8,6 +8,7 @@ using namespace http;
 
 class EventRequest : public EventWatcher
 {
+    public:
     EventRequest(shared_socket s);
     ~EventRequest();
     void operator()() override;
@@ -18,6 +19,7 @@ class EventRequest : public EventWatcher
 
 class EventResponse : public EventWatcher
 {
+    public:
     EventResponse(shared_socket s, Request req);
     ~EventResponse();
     void operator()() override;
