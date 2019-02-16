@@ -29,12 +29,13 @@ EventRequest::operator()()
     //add to the register of sockets
 
     event_register.register_ew<EventResponse>(s, req);
+    // call response
 }
 
 void  build_statusline(std::string& s, Response& r)
 {
-    s += r.version_; // version with SP
-    auto status = statusCode(status);   // pair of CODE, string
+    s += "HTTP/1.1 "; // version with SP
+    auto status = statusCode(r.status_);   // pair of CODE, string
     s += status.first;
     s += " ";
     s += status.second;
@@ -54,9 +55,10 @@ void add_headers(std::string& resp_str, std::map<std::string,std::string>& heade
 
 EventResponse::operator()()
 {
+    int len = 0;
     std::string resp_string;
     build_statusline(resp_str, res);
     add_headers(resp_str, headers);
-    ssize_t s = send(s->fd_ge()->fd_, resp_string, 100, 0);
+    ssize_t s = send(s->fd_ge()->fd_, resp_string, resp_string.length, 0);
 
 }
