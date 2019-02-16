@@ -9,7 +9,6 @@
 #include "misc/fd.hh"
 #include "misc/socket.hh"
 
-
 namespace http
 {
     /**

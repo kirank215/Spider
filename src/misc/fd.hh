@@ -39,7 +39,10 @@ namespace misc
         /**
          * \brief Implicit conversion to int.
          */
-        operator int() const;
+        operator int() const
+        {
+            return fd_;
+        }
 
         /**
          * \brief Implicit conversion to bool.
