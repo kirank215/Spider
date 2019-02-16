@@ -27,6 +27,11 @@ namespace http
 
         ~VHostConfig() = default;
 
+        std::string ip;     // possibly a socket?
+        std::string server_name;
+        uint16_t port;
+        std::string root;
+        std::string default_file;
         // FIXME: Add members to store the information relative to a vhost.
     };
 

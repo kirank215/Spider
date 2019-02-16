@@ -27,6 +27,8 @@ namespace http
         Connection& operator=(Connection&&) = default;
         ~Connection() = default;
 
+        // contains socket of client(accepted in listener) and the vhost
+        // used by dispacther
         /* FIXME: Add members to store the information relative to the
         ** connection.
         */
