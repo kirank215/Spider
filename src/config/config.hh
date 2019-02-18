@@ -5,8 +5,8 @@
 
 #pragma once
 
+#include <vector>
 #include <string>
-
 namespace http
 {
     /**
@@ -48,7 +48,6 @@ namespace http
         ServerConfig(ServerConfig&&) = default;
         ServerConfig& operator=(ServerConfig&&) = default;
 
-        ServerConfig(std::vector<VHostConfig> list_vhost);
         ~ServerConfig() = default;
         std::vector<VHostConfig> list_vhost;
     };
