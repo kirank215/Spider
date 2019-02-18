@@ -1,9 +1,7 @@
 #include "watcher.hh"
-
 #include "ev.h"
 #include <iostream>
 #include <netinet/in.h>
-
 #include "events/register.hh"
 #include "socket/socket.hh"
 

@@ -6,9 +6,9 @@
 #pragma once
 
 #include <memory>
-
+#include "vhost.hh"
 #include "socket/socket.hh"
-
+#include "config/config.hh"
 namespace http
 {
     /**
@@ -29,8 +29,11 @@ namespace http
 
         // contains socket of client(accepted in listener) and the vhost
         // used by dispacther
-        /* FIXME: Add members to store the information relative to the
+        /* FIX: Add members to store the information relative to the
         ** connection.
         */
+        shared_vhost vhost;
+        shared_socket s;
+        port p;
     };
 } // namespace http

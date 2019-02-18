@@ -26,13 +26,11 @@ namespace http
         VHostConfig& operator=(VHostConfig&&) = default;
 
         ~VHostConfig() = default;
-
         std::string ip;     // possibly a socket?
         std::string server_name;
         uint16_t port;
         std::string root;
         std::string default_file;
-        // FIXME: Add members to store the information relative to a vhost.
     };
 
     /**
@@ -50,10 +48,9 @@ namespace http
         ServerConfig(ServerConfig&&) = default;
         ServerConfig& operator=(ServerConfig&&) = default;
 
+        ServerConfig(std::vector<VHostConfig> list_vhost);
         ~ServerConfig() = default;
-
-        /* FIXME: Add members to store the information relative to the
-           configuration of the server. */
+        std::vector<VHostConfig> list_vhost;
     };
 
     /**

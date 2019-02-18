@@ -14,7 +14,16 @@
 
 using json = nlohmann::json;
 
-namespace http
+using namespace http;
+
+json create_json(const std::string path)
 {
-    // FIXME
-} // namespace http
+    std::ifstream file(path);
+    json j = json::parse(file);
+    return obj;
+}
+
+struct ServerConfig parse_configuration(const std::string& path)
+{
+
+}
