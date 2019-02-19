@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <set>
+#include <vector>
 #include <string>
 namespace http
 {
@@ -49,7 +49,7 @@ namespace http
         ServerConfig& operator=(ServerConfig&&) = default;
 
         ~ServerConfig() = default;
-        std::set<VHostConfig> list_vhost;
+        std::vector<VHostConfig> list_vhost;
     };
 
     /**
