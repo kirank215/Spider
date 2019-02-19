@@ -59,5 +59,5 @@ namespace http
      * file.
      * \return The server configuration.
      */
-    struct ServerConfig parse_configuration(const std::string& path);
+    ServerConfig parse_configuration(const std::string& path);
 } // namespace http

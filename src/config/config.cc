@@ -11,38 +11,55 @@
 #endif
 #include <json.hpp>
 #include <fstream>
+#include <iostream>
 #pragma GCC diagnostic pop
 
 using json = nlohmann::json;
 
-using namespace http;
-
-static json create_json(const std::string path)
+namespace http
 {
-    std::ifstream file(path);
-    json j = json::parse(file);
-    return j;
-}
 
-struct ServerConfig http::parse_configuration(const std::string& path)
-{
-    struct ServerConfig SC;
-    json j = create_json(path);
-    std::vector<VHostConfig> list_vhost;
-    for(auto elt : j)
+    static json create_json(const std::string path)
     {
-        struct VHostConfig v;
-        if(elt["ip"] && elt["port"] && elt["server_name"] && elt["root"])
+        std::ifstream file(path);
+        if(file.is_open())
         {
-            v.ip = elt["ip"];
-            v.server_name = elt["server_name"];
-            v.port = elt["port"];
-            v.root = elt["root"];
-            if(elt["default_file"])
-                v.default_file = elt["default_file"];
-            list_vhost.push_back(v);
+
+            json j = json::parse(file);
+            return j;
         }
+        else
+            throw std::logic_error("File does not exist");//FIXME, should return int
     }
-    SC.list_vhost = list_vhost;
-    return SC;
+
+    ServerConfig parse_configuration(const std::string& path)
+    {
+        struct ServerConfig SC;
+        json j = create_json(path); // FIXME, should return int
+        std::vector<VHostConfig> list_vhost;
+        for(auto elt : j)
+        {
+            for(unsigned int i = 0; i < elt.size(); i++)
+            {
+                struct VHostConfig v;
+                if(elt[i]["ip"].is_string() &&
+                    elt[i]["port"].is_number() &&
+                    elt[i]["server_name"].is_string() &&
+                    elt[i]["root"].is_string())
+                {
+                    v.ip = elt[i]["ip"];
+                    v.server_name = elt[i]["server_name"];
+                    v.port = elt[i]["port"];
+                    v.root = elt[i]["root"];
+                    if(elt[i]["default_file"].is_string())
+                        v.default_file = elt[i]["default_file"];
+                    else
+                        v.default_file = "index.html";
+                    list_vhost.push_back(v);
+                }
+            }
+            SC.list_vhost = list_vhost;
+        }
+        return SC;
+    }
 }
