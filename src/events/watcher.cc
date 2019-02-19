@@ -13,11 +13,10 @@ EventRequest::EventRequest(shared_socket sock)
     s = sock;
 }
 
-EventResponse::EventResponse(shared_socket sock, Request request)
+EventResponse::EventResponse(shared_socket sock, Response& r)
 {
     EventWatcher::EventWatcher(sock->fd_get(), EV_WRITE);
     sock_ = sock;
-    Response r(request, request.status);
     res_ = r;
 }
 
@@ -57,6 +56,7 @@ EventResponse::operator()()
     std::string resp_string;
     build_statusline(resp_str, res);
     add_headers(resp_str, headers);
+    resp_string += res_.msg_body_;
     ssize_t s = send(s->fd_ge()->fd_, resp_string, resp_string.length, 0);
 
 }

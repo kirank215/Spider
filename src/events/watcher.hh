@@ -20,7 +20,7 @@ class EventRequest : public EventWatcher
 class EventResponse : public EventWatcher
 {
     public:
-    EventResponse(shared_socket s, Request req);
+    EventResponse(shared_socket s, Response& r);
     ~EventResponse();
     void operator()() override;
     private :
