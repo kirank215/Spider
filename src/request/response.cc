@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <ctime>
+#include <string>
 
 http::Response::Response(const STATUS_CODE& st)
     : status_(st)
@@ -45,14 +46,13 @@ void http::Response::build_head()
     headers_.emplace("Content-Length", "0");
 }
 
-// TO FIX : ADD A PROPER MESSAGE BODY
 void http::Response::build_get(std::string& body)
 {
     msg_body_ = body;
     auto time =
         std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     headers_.emplace("Date", std::ctime(&time));
-    headers_.emplace("Content-Length", body.length);
+    headers_.emplace("Content-Length", std::to_string(body.length()));
 }
 
 void http::Response::build_post()
