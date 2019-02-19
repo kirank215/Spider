@@ -11,11 +11,11 @@ std::optional<shared_con> http::Dispatcher::create_connection
     {
         if(h.first == "host")
         {
-            for(auto& h1 : hosts_)
+            for(auto& h1 : hosts_)      // hosts_ ->  set of vhosts
             {
                 if(h1.server_name == h.second)
                 {
-                    Connection c(er.s, h1);
+                    Connection c(h1, er.s, h1.port);
                     auto cshared = make_shared<Connection>(c);
                     connections_.insert(cshared);
                     return cshared;
