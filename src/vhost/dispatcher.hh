@@ -4,6 +4,7 @@
  */
 
 #pragma once
+#include "connection.hh"
 
 
 namespace http
@@ -21,10 +22,14 @@ namespace http
         Dispatcher(Dispatcher&&) = delete;
         Dispatcher& operator=(Dispatcher&&) = delete;
 
+        void create_connection(Const& Request);
+
+
     private:
-        /* FIXME: Add members to store the information relative to the
-        ** Dispatcher.
-        */
+        //** Dispatcher.
+        ServerConfig hosts_;
+        std::vector<Connection> connections_;
+
     };
 
     /**
