@@ -55,7 +55,7 @@ namespace http
                         v.default_file = elt[i]["default_file"];
                     else
                         v.default_file = "index.html";
-                    list_vhost.push_back(v);
+                    list_vhost.insert(v);
                 }
             }
             SC.list_vhost = list_vhost;
