@@ -1,5 +1,5 @@
 #include "config/config.hh"
-
+#include <exception>
 #include "error/not-implemented.hh"
 
 #pragma GCC diagnostic push
@@ -24,38 +24,41 @@ namespace http
         std::ifstream file(path);
         if(file.is_open())
         {
-
             json j = json::parse(file);
             return j;
         }
         else
-            throw std::logic_error("File does not exist");//FIXME, should return int
+            throw std::logic_error("File does not exist\n");
     }
 
-    ServerConfig parse_configuration(const std::string& path)
+    ServerConfig parse_configuration(const std::string& path, bool dry)
     {
+        json j;
+        j = create_json(path);
         struct ServerConfig SC;
-        json j = create_json(path); // FIXME, should return int
-        std::vector<VHostConfig> list_vhost;
-        for(auto elt : j)
+        if(!dry)
         {
-            for(unsigned int i = 0; i < elt.size(); i++)
+            std::vector<VHostConfig> list_vhost;
+            for(auto elt : j)
             {
-                struct VHostConfig v;
-                if(elt[i]["ip"].is_string() &&
-                    elt[i]["port"].is_number() &&
-                    elt[i]["server_name"].is_string() &&
-                    elt[i]["root"].is_string())
+                for(unsigned int i = 0; i < elt.size(); i++)
                 {
-                    v.ip = elt[i]["ip"];
-                    v.server_name = elt[i]["server_name"];
-                    v.port = elt[i]["port"];
-                    v.root = elt[i]["root"];
-                    if(elt[i]["default_file"].is_string())
-                        v.default_file = elt[i]["default_file"];
-                    else
-                        v.default_file = "index.html";
-                    list_vhost.insert(v);
+                    struct VHostConfig v;
+                    if(elt[i]["ip"].is_string() &&
+                            elt[i]["port"].is_number() &&
+                            elt[i]["server_name"].is_string() &&
+                            elt[i]["root"].is_string())
+                    {
+                        v.ip = elt[i]["ip"];
+                        v.server_name = elt[i]["server_name"];
+                        v.port = elt[i]["port"];
+                        v.root = elt[i]["root"];
+                        if(elt[i]["default_file"].is_string())
+                            v.default_file = elt[i]["default_file"];
+                        else
+                            v.default_file = "index.html";
+                        list_vhost.insert(v);
+                    }
                 }
             }
             SC.list_vhost = list_vhost;
