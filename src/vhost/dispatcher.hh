@@ -4,7 +4,10 @@
  */
 
 #pragma once
-#include "connection.hh"
+#include <optional>
+#include "vhost/connection.hh"
+#include "request/request.hh"
+
 
 
 namespace http
@@ -22,13 +25,13 @@ namespace http
         Dispatcher(Dispatcher&&) = delete;
         Dispatcher& operator=(Dispatcher&&) = delete;
 
-        void create_connection(Const& Request);
+        std::optional<shared_con> create_connection(Const& Request);
 
 
     private:
         //** Dispatcher.
         ServerConfig hosts_;
-        std::vector<Connection> connections_;
+        std::vector<shared_con> connections_;
 
     };
 
