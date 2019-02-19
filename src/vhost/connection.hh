@@ -22,6 +22,7 @@ namespace http
     {
         Connection() = default;
         Connection(const Connection&) = default;
+        Connection&(VhostConfig& v, shared_socket s, port p);
         Connection& operator=(const Connection&) = default;
         Connection(Connection&&) = default;
         Connection& operator=(Connection&&) = default;
@@ -32,8 +33,9 @@ namespace http
         /* FIX: Add members to store the information relative to the
         ** connection.
         */
-        shared_vhost vhost;
+        VhostConfig vhost;
         shared_socket s;
         port p;
     };
+    using shared_con = std::shared_ptr<Connection>;
 } // namespace http

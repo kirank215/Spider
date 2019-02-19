@@ -24,6 +24,6 @@ class EventResponse : public EventWatcher
     ~EventResponse();
     void operator()() override;
     private :
-    shared_socket s;
-    Response res;
+    shared_socket sock_;
+    Response res_;
 };

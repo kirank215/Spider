@@ -15,10 +15,10 @@ EventRequest::EventRequest(shared_socket sock)
 
 EventResponse::EventResponse(shared_socket sock, Request request)
 {
-    EventWatcher::EventWatcher(s->fd_get(), EV_WRITE);
-    s = sock;
+    EventWatcher::EventWatcher(sock->fd_get(), EV_WRITE);
+    sock_ = sock;
     Response r(request, request.status);
-    res = r;
+    res_ = r;
 }
 
 EventRequest::operator()()
