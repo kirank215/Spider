@@ -27,7 +27,7 @@ namespace misc
             : fd_{fd}
         {}
 
-        ~FileDescriptor();
+        ~FileDescriptor()=default; //FIXME changed to default
 
         FileDescriptor(const FileDescriptor&) = delete;
         FileDescriptor& operator=(const FileDescriptor&) = delete;
