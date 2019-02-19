@@ -46,13 +46,13 @@ void http::Response::build_head()
 }
 
 // TO FIX : ADD A PROPER MESSAGE BODY
-void http::Response::build_get()
+void http::Response::build_get(std::string& body)
 {
-    msg_body_ = "";
+    msg_body_ = body;
     auto time =
         std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     headers_.emplace("Date", std::ctime(&time));
-    headers_.emplace("Content-Length", "0");
+    headers_.emplace("Content-Length", body.length);
 }
 
 void http::Response::build_post()
@@ -64,7 +64,8 @@ void http::Response::build_post()
     headers_.emplace("Content-Length", "0");
 }
 
-http::Response::Response(const Request& request, const STATUS_CODE& st)
+http::Response::Response(const Request& request, const STATUS_CODE& st,
+                            std::string body)
     : status_(st)
 {
     if (request.m_ == BAD) // Got a bad method.
@@ -76,7 +77,7 @@ http::Response::Response(const Request& request, const STATUS_CODE& st)
         if (request.m_ == HEAD)
             build_head();
         if (request.m_ == GET)
-            build_get();
+            build_get(body);
         if (request.m_ == POST)
             build_post();
         headers_ = request.headers_;

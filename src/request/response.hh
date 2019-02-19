@@ -54,7 +54,8 @@ namespace http
     struct Response
     {
         explicit Response(const STATUS_CODE&);
-        Response(const Request&, const STATUS_CODE& = STATUS_CODE::OK);
+        Response(const Request&, const STATUS_CODE& = STATUS_CODE::OK,
+                    std::string body = "");
 
         Response() = default;
         Response(const Response&) = default;
@@ -64,7 +65,7 @@ namespace http
         ~Response() = default;
 
         void build_head();
-        void build_get();
+        void build_get(std::string& body);
         void build_post();
         int check_headers() const;
         int check_list(const std::string& header,
