@@ -9,6 +9,7 @@
 #include "vhost.hh"
 #include "socket/socket.hh"
 #include "config/config.hh"
+
 namespace http
 {
     /**
@@ -22,7 +23,7 @@ namespace http
     {
         Connection() = default;
         Connection(const Connection&) = default;
-        Connection&(VhostConfig& v, shared_socket s, port p);
+        Connection(VHostConfig& v, shared_socket s, port p);
         Connection& operator=(const Connection&) = default;
         Connection(Connection&&) = default;
         Connection& operator=(Connection&&) = default;
@@ -33,9 +34,9 @@ namespace http
         /* FIX: Add members to store the information relative to the
         ** connection.
         */
-        VhostConfig vhost;
+        VhostConfig vc;
         shared_socket s;
-        port p;
+        uint16_t p;
     };
     using shared_con = std::shared_ptr<Connection>;
 } // namespace http
