@@ -38,14 +38,19 @@ int main(int argc, char *argv[])
     hints.family(AF_INET);
     hints.socktype(SOCK_STREAM);
 
-    //server
+    //server socket creation and binding
     VHostConfig vc = sc.list_vhost[0];
     const char *port = std::to_string(vc.port).c_str();
     const char *ip = vc.ip.c_str();
     AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
-
     sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
+
     //calling listener
+    ListenerEW listener(sha_sock);
+    EventWatcherRegistry ewr();
+    ewr.register_ew(listener);
+    loop_get();
+
 
 
     /*TESTING PARSING
