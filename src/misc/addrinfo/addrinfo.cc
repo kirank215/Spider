@@ -16,8 +16,10 @@ namespace misc
     }
 } // namespace misc
 
-std::ostream& operator<<(std::ostream& os, const addrinfo&)
+std::ostream& operator<<(std::ostream& os, const addrinfo& addr)
 {
-    // FIXME: Not implemented
-    return os;
+    return os << "Family: " << addr.ai_family << ", Flags: " << addr.ai_flags
+              << ", SockType: " << addr.ai_socktype << ", Protocol; "
+              << addr.ai_protocol << ", Addrlen: " << addr.ai_addrlen
+              << ", Addr: " << addr.ai_addr;
 }
