@@ -59,6 +59,8 @@ namespace http
                             v.default_file = "index.html";
                         list_vhost.push_back(v);
                     }
+                    else
+                        throw std::logic_error("Vhost incomplete\n");
                 }
             }
             SC.list_vhost = list_vhost;
