@@ -6,21 +6,15 @@ X : Not started
 Priority :
 
 Implement event loop [T]
-Implement listener [O] - l.n
-Implement requests [O] - s.d
-Implement responses [X]
+Implement listener [T]
+Implement requests [T]
+Implement responses [O] - Need to implement GET and POST and status codes -
 
-Implement listener [O]
-{
-    Implement EventWatcher to parse requests [X]
-    Implement EventWatcher for all requests [X]
-}
+--- Configuration file handling [V]
 
---- Configuration file handling [X]
+--- Event Loop [T]
 
---- Event Loop [X]
-
---- Implementing Vhosts [X]
+--- Implementing Vhosts [T]
 
 --- Reverse Proxy [X]
 
@@ -28,6 +22,3 @@ Implement listener [O]
 
 --- Authentication [X]
 
----EventWatcher : need to handle the differents classes of events
-override the functors, in EventRequest create a request, and treat it
-in EventResponse handle the answer
