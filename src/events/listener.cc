@@ -4,8 +4,8 @@
 #include <iostream>
 #include <netinet/in.h>
 
-#include "events/watcher.hh"
 #include "events/register.hh"
+#include "events/watcher.hh"
 #include "misc/socket.hh"
 #include "socket/socket.hh"
 

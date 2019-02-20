@@ -42,6 +42,8 @@ libspider_la_SOURCES = \
                        src/events/listener.hh \
                        src/events/register.hh \
                        src/events/register.hxx \
+                       src/events/watcher.cc \
+                       src/events/watcher.hh \
                        src/misc/addrinfo/addrinfo-error.cc \
                        src/misc/addrinfo/addrinfo-error.hh \
                        src/misc/addrinfo/addrinfo-iterator.hh \
