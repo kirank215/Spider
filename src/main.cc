@@ -30,20 +30,21 @@ int main(int argc, char *argv[])
         exit(1);
     }
     /* Dont knwo whether to be done here or listener*/
-    auto def_sock = DefaultSocket(AF_UNSPEC, SOCK_STREAM, 0);
+    /*Doing only ipv4 now*/
+    auto sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
+    auto sha_sock = std::make_shared<DefaultSocket>(sock);
 
     AddrInfoHint hints;
-    hints.family(AF_UNSPEC);
+    hints.family(AF_INET);
     hints.socktype(SOCK_STREAM);
-    hints.addrlen(32);
-    // hints.flags(AI_PASSIVE);
 
     //server
     VHostConfig vc = sc.list_vhost[0];
     const char *port = std::to_string(vc.port).c_str();
-    AddrInfo adrin = misc::getaddrinfo(NULL, port, hints);
+    const char *ip = vc.ip.c_str();
+    AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
 
-    //def_sock.bind()
+    sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
     //calling listener
 
 
