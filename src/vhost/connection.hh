@@ -31,8 +31,9 @@ namespace http
 
         // contains socket of client(accepted in listener) and the vhost
         // used by dispacther
-        /* FIX: Add members to store the information relative to the
-        ** connection.
+        /* FIXME: Add members to store the information relative to the
+        ** connection. When implementing requests requiring multiple responses
+        ** will need a boolean to know the state of the request.
         */
         VhostConfig vc;
         shared_socket s;
