@@ -4,6 +4,8 @@
 #include "misc/fd.hh"
 #include "socket/default-socket.hh"
 #include "misc/addrinfo/addrinfo.hh"
+#include "events/listener.hh"
+#include "events/register.hh"
 #include <iostream>
 #include <cstring>
 #include <sys/types.h>
@@ -11,6 +13,8 @@
 #include <netdb.h>
 using namespace http;
 using namespace misc;
+
+EventWatcherRegistry http::event_register;
 
 int main(int argc, char *argv[])
 {
@@ -46,10 +50,11 @@ int main(int argc, char *argv[])
     sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
 
     //calling listener
-    ListenerEW listener(sha_sock);
-    EventWatcherRegistry ewr();
-    ewr.register_ew(listener);
-    loop_get();
+    /*EventWatcherRegistry event_register();*/
+    event_register.register_ew<ListenerEW>(sha_sock);
+    EventLoop loop = event_register.loop_get();
+    loop();
+
 
 
 

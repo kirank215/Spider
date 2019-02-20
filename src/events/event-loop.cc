@@ -27,7 +27,7 @@ void http::EventLoop::register_sigint_watcher(ev_signal* sig) const
     ev_signal_start(loop, sig);
 }
 
-void http::EventLoop::operator() const
+void http::EventLoop::operator()() const
 {
     ev_run(loop, 0);
 }
