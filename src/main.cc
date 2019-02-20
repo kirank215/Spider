@@ -25,9 +25,10 @@ int main(int argc, char *argv[])
         std::cerr << e.what();
         exit(1);
     }
-    //auto def_sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
+    auto def_sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
 
-    /*TESTING PARSING*/
+
+    /*TESTING PARSING
     for(auto it = lol.list_vhost.begin(); it != lol.list_vhost.end(); it++)
     {
         VHostConfig foo = *it;
@@ -36,5 +37,5 @@ int main(int argc, char *argv[])
         std::cout << "server_name : " << foo.server_name<< "\n";
         std::cout << "root : " << foo.root<< "\n";
         std::cout << "default_file : " << foo.default_file<< "\n\n";
-    }
+    }*/
 }
