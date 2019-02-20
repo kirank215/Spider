@@ -34,8 +34,9 @@ namespace http
     Request::Request(shared_socket new_socket)
     {
         char buffer[4096]; //Ususally buffer lenght is 8kb
-        auto check = sys::recv(new_socket->fd_get()->fd_, buffer, 4096, 0); // change later FIXME
-        //auto check = new_socket.recv(buffer, 4096, 0);
+        // FIXME Have to make sure to not take more than msg_len bytes, in order
+        // to not step into next request. remove 4096.
+        auto check = new_socket->recv(buffer, 4096);
         int max = 0;
         if (check < 0)
             std::cout << "Error reading the request";
