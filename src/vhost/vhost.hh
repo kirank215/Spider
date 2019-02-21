@@ -30,7 +30,7 @@ namespace http
         explicit VHost(const VHostConfig&);
 
         VHost() = delete;
-        VHost(const VHost&) = delete;
+        VHost(const VHost&) = delete; //pbl here
         VHost& operator=(const VHost&) = delete;
         VHost(VHost&&) = delete;
         VHost& operator=(VHost&&) = delete;
