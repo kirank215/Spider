@@ -66,9 +66,13 @@ libspider_la_SOURCES = \
                        src/socket/socket.cc \
                        src/socket/socket.hh \
                        src/vhost/connection.hh \
+                       src/vhost/connection.cc \
                        src/vhost/dispatcher.hh \
+                       src/vhost/dispatcher.cc \
                        src/vhost/vhost-factory.hh \
+                       src/vhost/vhost-factory.cc \
                        src/vhost/vhost-static-file.hh \
+                       src/vhost/vhost-static-file.cc \
                        src/vhost/vhost.hh \
                        $(NULL)
 
