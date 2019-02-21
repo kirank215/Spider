@@ -5,7 +5,7 @@
 namespace http
 {
 
-    std::optional<shared_con> Dispatcher::create_connection
+    std::optional<Connection> Dispatcher::create_connection
         (const EventRequest& er)
         {
             const Request& r = er.get_request();
@@ -18,9 +18,8 @@ namespace http
                         if(h1.server_name == h.second)
                         {
                             Connection c(h1, er.get_sock(), h1.port);
-                            auto cshared = std::make_shared<Connection>(c);
-                            connections_.insert(cshared);
-                            return cshared;
+                        //    connections_.insert(c);
+                            return c;
                         }
                     }
                 }

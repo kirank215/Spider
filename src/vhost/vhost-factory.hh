@@ -17,6 +17,6 @@ namespace http
         /**
          * \brief Create a VHost object from a given VHostConfig.
          */
-        static shared_vhost Create(VHostConfig);
+        static shared_vhost Create(const VHostConfig&);
     };
 } // namespace http

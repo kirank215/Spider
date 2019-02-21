@@ -3,9 +3,10 @@
 
 namespace http
 {
-    shared_vhost VHostFactory::Create(VHostConfig v)
+    shared_vhost VHostFactory::Create(const VHostConfig& v)
     {
-        static shared_vhost s_vh = std::make_shared<VHost>(VHostStaticFile(v));
+        
+        auto s_vh = std::make_shared<VHostStaticFile>(std::move(VHostStaticFile(v)));
         return s_vh;
     }
 }

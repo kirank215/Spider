@@ -26,13 +26,13 @@ namespace http
             Dispatcher(Dispatcher&&) = delete;
             Dispatcher& operator=(Dispatcher&&) = delete;
 
-            std::optional<shared_con> create_connection(const EventRequest&);
+            std::optional<Connection> create_connection(const EventRequest&);
 
 
         private:
             //** Dispatcher.
             ServerConfig hosts_;
-            std::vector<shared_con> connections_;
+            std::vector<Connection> connections_;
 
     };
 
