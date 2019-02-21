@@ -46,7 +46,6 @@ namespace http
         s += "\r\n";
     }
 
-
    static void add_headers(std::string& resp_str, std::map<std::string,std::string>& headers)
     {
         for(auto &x : headers)

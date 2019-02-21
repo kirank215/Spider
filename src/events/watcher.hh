@@ -6,8 +6,7 @@
 
 namespace http
 {
-
-    class EventRequest : public EventWatcher
+class EventRequest : public EventWatcher
     {
         public:
             explicit EventRequest(shared_socket s);
@@ -30,5 +29,4 @@ namespace http
             shared_socket sock_;
             Response res_;
     };
-
 }
