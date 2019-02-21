@@ -39,14 +39,14 @@ namespace misc
         /**
          * \brief Implicit conversion to int.
          */
-        operator int() const;
+        operator int() const&;
 
         /**
          * \brief Implicit conversion to bool.
          *
          * \return Whether or not the FileDescriptor holds a valid fd.
          */
-        operator bool() const;
+        operator bool() const&;
 
         /**
          * \brief The fd held by the FileDescriptor object.
