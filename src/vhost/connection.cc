@@ -1,9 +1,8 @@
 #include "connection.hh"
-#include "vhost/vhost.hh"
 
-http::Connection::Connection(VHostConfig& v, shared_socket s, uint16_t p)
+http::Connection::Connection(VHostConfig& vh, shared_socket sock, uint16_t port)
 {
-    vc = v;
-    sock = s;
-    port = p;
+    vc_ = vh;
+    s_ = sock;
+    p_ = port;
 }

@@ -9,10 +9,10 @@
 #include "config/config.hh"
 #include "error/not-implemented.hh"
 #include "request/request.hh"
-#include "vhost/connection.hh"
 
 namespace http
 {
+    struct Connection;
     // FIXME: iterator to data remaining from next request.
     using remaining_iterator = NotImplemented;
     /**
@@ -44,7 +44,7 @@ namespace http
          * \param begin remaining_iterator of received data.
          * \param end remaining_iterator of received data.
          */
-        virtual void respond(const Request&, Connection, remaining_iterator,
+        virtual void respond(const Request&, Connection , remaining_iterator,
                              remaining_iterator) = 0;
 
         inline const VHostConfig& conf_get() const noexcept

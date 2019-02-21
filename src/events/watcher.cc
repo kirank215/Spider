@@ -18,6 +18,15 @@ namespace http
     {
     }
 
+    const Request& EventRequest::get_request() const
+    {
+        return req_;
+    }
+
+    const shared_socket& EventRequest::get_sock() const
+    {
+        return sock_;
+    }
     void EventRequest::operator()()
     {
         req_ = Request(sock_);

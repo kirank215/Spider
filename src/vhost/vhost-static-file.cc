@@ -6,12 +6,13 @@
 #include "vhost/connection.hh"
 
 http::VHostStaticFile::VHostStaticFile(const VHostConfig& v):VHost(v)
-{};
+{}
+
 void http::VHostStaticFile::respond(const Request& req, Connection c,
         remaining_iterator rm1, remaining_iterator rm2)
 {
     STATUS_CODE st;
-    std::string path = req.request_uri_ + c.vc.root;
+    std::string path = req.request_uri_ + c.vc_.root;
     std::string out;
     std::string line;
     std::ifstream f(path);
@@ -24,5 +25,5 @@ void http::VHostStaticFile::respond(const Request& req, Connection c,
         st = OK;
     }
     Response resp(req, st, out);
-    EventResponse er(c.s, resp);
+    EventResponse er(c.s_, resp);
 }

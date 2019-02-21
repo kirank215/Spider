@@ -13,6 +13,8 @@ namespace http
             explicit EventRequest(shared_socket s);
             ~EventRequest() = default;
             void operator()() final;
+            const Request& get_request() const;
+            const shared_socket& get_sock() const;
         private :
             shared_socket sock_;
             Request req_;

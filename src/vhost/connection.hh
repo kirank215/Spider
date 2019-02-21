@@ -6,7 +6,7 @@
 #pragma once
 
 #include <memory>
-#include "vhost.hh"
+#include "vhost/vhost.hh"
 #include "socket/socket.hh"
 #include "config/config.hh"
 
@@ -23,7 +23,7 @@ namespace http
     {
         Connection() = default;
         Connection(const Connection&) = default;
-        Connection(VHostConfig& v, shared_socket s, port p);
+        Connection(VHostConfig& v, shared_socket s, uint16_t p);
         Connection& operator=(const Connection&) = default;
         Connection(Connection&&) = default;
         Connection& operator=(Connection&&) = default;
@@ -35,9 +35,9 @@ namespace http
         ** connection. When implementing requests requiring multiple responses
         ** will need a boolean to know the state of the request.
         */
-        VhostConfig vc;
-        shared_socket s;
-        uint16_t p;
+        VHostConfig vc_;
+        shared_socket s_;
+        uint16_t p_;
     };
     using shared_con = std::shared_ptr<Connection>;
 } // namespace http
