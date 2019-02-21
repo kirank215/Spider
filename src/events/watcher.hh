@@ -4,26 +4,29 @@
 #include "request/response.hh"
 #include "socket/socket.hh"
 
-using namespace http;
-
-class EventRequest : public EventWatcher
+namespace http
 {
-    public:
-    EventRequest(shared_socket s);
-    ~EventRequest();
-    void operator()() override;
-    private :
-    shared_socket s;
-    Request req;
-};
 
-class EventResponse : public EventWatcher
-{
-    public:
-    EventResponse(shared_socket s, Response& r);
-    ~EventResponse();
-    void operator()() override;
-    private :
-    shared_socket sock_;
-    Response res_;
-};
+    class EventRequest : public EventWatcher
+    {
+        public:
+            explicit EventRequest(shared_socket s);
+            ~EventRequest() = default;
+            void operator()() final;
+        private :
+            shared_socket sock_;
+            Request req_;
+    };
+
+    class EventResponse : public EventWatcher
+    {
+        public:
+            explicit EventResponse(shared_socket s, const Response& r);
+            ~EventResponse() = default;
+            void operator()() final;
+        private :
+            shared_socket sock_;
+            Response res_;
+    };
+
+}
