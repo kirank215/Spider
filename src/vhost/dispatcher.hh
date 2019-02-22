@@ -29,14 +29,14 @@ namespace http
 
             std::optional<Connection> create_connection(const EventRequest&);
             void set_hosts(ServerConfig&);
-            void insert_staticfile(VHostStaticFile);
+            void insert_staticfile(shared_vhost vs);
 
 
         private:
             //** Dispatcher.
             // change to map of config and static file
             ServerConfig hosts_;
-            std::vector<VHostStaticFile> vstatic_;
+            std::vector<shared_vhost> vstatic_;
             //std::vector<Connection> connections_;
 
     };

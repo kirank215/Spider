@@ -32,7 +32,7 @@ namespace http
         hosts_ = hosts;
     }
 
-    void Dispatcher::insert_staticfile(VHostStaticFile vs)
+    void Dispatcher::insert_staticfile(shared_vhost vs)
     {
         vstatic_.emplace_back(vs);
     }
