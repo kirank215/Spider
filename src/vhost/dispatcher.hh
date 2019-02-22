@@ -30,6 +30,8 @@ namespace http
             std::optional<Connection> create_connection(const EventRequest&);
             void set_hosts(ServerConfig&);
             void insert_staticfile(shared_vhost vs);
+            void respond(const Request&, const Connection& c);
+
 
 
         private:

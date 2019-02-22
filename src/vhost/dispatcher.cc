@@ -37,5 +37,14 @@ namespace http
         vstatic_.emplace_back(vs);
     }
 
+    void Dispatcher::respond(const Request& req, const Connection& c)
+    {
+        auto vc = c.vc_;
+        for(auto& vs : vstatic_)
+        {
+            if(vc == vs->conf_get())
+                vs->respond(req, c, 0, 0); // FIXME remaining iterator for respond
+        }
+    }
     // add response function here that finds the static file of a vhost config and calls the respond function
 }

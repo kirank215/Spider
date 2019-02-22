@@ -35,6 +35,7 @@ namespace http
         auto c = dispatcher.create_connection(*this);
         if(!c)
             throw "Unable to form connection.";
+        dispatcher.respond(req_, *c);
 
         // FIXME use connection to send response
         event_register.register_ew<EventResponse>(sock_, req_);
