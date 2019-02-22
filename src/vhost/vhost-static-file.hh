@@ -16,6 +16,7 @@ namespace http
      * \class VHostStaticFile
      * \brief VHost serving static files.
      */
+    using remaining_iterator = int;
     class VHostStaticFile : public VHost
     {
         public:

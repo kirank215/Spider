@@ -12,10 +12,9 @@ namespace http
     {}
 
     void VHostStaticFile::respond(const Request& req, Connection c,
-            remaining_iterator rm1, remaining_iterator rm2)
+            remaining_iterator, remaining_iterator)
     {
         STATUS_CODE st;
-        rm1 = rm2;
         std::string path = req.request_uri_ + c.vc_.root;
         std::string out;
         std::string line;
