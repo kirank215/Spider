@@ -13,12 +13,12 @@ namespace http
             {
                 if(h.first == "host")
                 {
-                    for(auto& h1 : hosts_.list_vhost)      // hosts_ ->  set of vhosts
+                    for(auto& conf : hosts_.list_vhost)      // hosts_ ->  list of vhostsconfigs
                     {
-                        if(h1.server_name == h.second)
+                        if(conf.server_name == h.second)
                         {
-                            Connection c(h1, er.get_sock(), h1.port);
-                        //    connections_.insert(c);
+                            Connection c(conf, er.get_sock(), conf.port);
+//                            connections_.insert(c);
                             return c;
                         }
                     }
@@ -31,4 +31,11 @@ namespace http
     {
         hosts_ = hosts;
     }
+
+    void Dispatcher::insert_staticfile(VHostStaticFile vs)
+    {
+        vstatic_.emplace_back(vs);
+    }
+
+    // add response function here that finds the static file of a vhost config and calls the respond function
 }

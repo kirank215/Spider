@@ -72,7 +72,9 @@ libspider_la_SOURCES = \
                        src/vhost/vhost-factory.hh \
                        src/vhost/vhost-factory.cc \
                        src/vhost/vhost-static-file.hh \
+                       src/vhost/vhost-static-file.cc \
                        src/vhost/vhost.hh \
+                       src/vhost/vhost.cc \
                        $(NULL)
 
 spider_SOURCES = \

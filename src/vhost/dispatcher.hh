@@ -8,6 +8,7 @@
 #include "vhost/connection.hh"
 #include "events/watcher.hh"
 #include "request/request.hh"
+#include "vhost/vhost-static-file.hh"
 
 
 
@@ -28,12 +29,15 @@ namespace http
 
             std::optional<Connection> create_connection(const EventRequest&);
             void set_hosts(ServerConfig&);
+            void insert_staticfile(VHostStaticFile);
 
 
         private:
             //** Dispatcher.
+            // change to map of config and static file
             ServerConfig hosts_;
-            std::vector<Connection> connections_;
+            std::vector<VHostStaticFile> vstatic_;
+            //std::vector<Connection> connections_;
 
     };
 

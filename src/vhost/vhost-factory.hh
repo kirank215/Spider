@@ -4,6 +4,7 @@
  */
 
 #include "vhost/vhost.hh"
+#include "vhost/vhost-static-file.hh"
 
 namespace http
 {

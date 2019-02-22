@@ -1,5 +1,4 @@
 #include "vhost/vhost-factory.hh"
-#include "vhost/vhost-static-file.hh"
 
 namespace http
 {
