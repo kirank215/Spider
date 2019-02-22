@@ -27,6 +27,7 @@ namespace http
             Dispatcher& operator=(Dispatcher&&) = delete;
 
             std::optional<Connection> create_connection(const EventRequest&);
+            void set_hosts(ServerConfig&);
 
 
         private:

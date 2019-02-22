@@ -1,4 +1,8 @@
-#include "error/not-implemented.hh"
+#include <iostream>
+#include <cstring>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include "config/config.hh"
 #include "misc/socket.hh"
 #include "misc/fd.hh"
@@ -6,15 +10,16 @@
 #include "misc/addrinfo/addrinfo.hh"
 #include "events/listener.hh"
 #include "events/register.hh"
-#include <iostream>
-#include <cstring>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
+#include "error/not-implemented.hh"
+#include "vhost/dispatcher.hh"
+#include "vhost/vhost-static-file.hh"
+#include "vhost/vhost-factory.hh"
+
 using namespace http;
 using namespace misc;
 
 EventWatcherRegistry http::event_register;
+Dispatcher http::dispatcher;
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +38,9 @@ int main(int argc, char *argv[])
         std::cerr << e.what();
         exit(1);
     }
+
+    dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
+
     /* Dont knwo whether to be done here or listener*/
     /*Doing only ipv4 now*/
     auto sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
@@ -44,6 +52,7 @@ int main(int argc, char *argv[])
 
     //server socket creation and binding
     VHostConfig vc = sc.list_vhost[0];
+    auto vstatic = VHostFactory::Create(vc);
     const char *port = std::to_string(vc.port).c_str();
     const char *ip = vc.ip.c_str();
     AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);

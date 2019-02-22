@@ -27,4 +27,8 @@ namespace http
             return std::nullopt;
         }
 
+    void Dispatcher::set_hosts(ServerConfig& hosts)
+    {
+        hosts_ = hosts;
+    }
 }

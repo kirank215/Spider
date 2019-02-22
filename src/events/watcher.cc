@@ -4,6 +4,7 @@
 #include "events/register.hh"
 #include "socket/socket.hh"
 #include "events/watcher.hh"
+#include "vhost/dispatcher.hh"
 #include "ev.h"
 
 namespace http
@@ -31,7 +32,11 @@ namespace http
     {
         req_ = Request(sock_);
         //add to the register of sockets
+        auto c = dispatcher.create_connection(*this);
+        if(!c)
+            throw "Unable to form connection.";
 
+        // FIXME use connection to send response
         event_register.register_ew<EventResponse>(sock_, req_);
         // call response
     }
@@ -62,7 +67,7 @@ namespace http
         build_statusline(resp_str, res_);
         add_headers(resp_str, res_.headers_);
         resp_str += res_.msg_body_;
-        send(sock_->fd_get()->fd_, resp_str.c_str(), resp_str.length(), 0);
+        sock_->send(resp_str.c_str(), resp_str.length());
 
     }
 }
