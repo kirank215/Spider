@@ -31,6 +31,10 @@ namespace http
             throw std::logic_error("File does not exist\n");
     }
 
+    bool VHostConfig::operator==(const VHostConfig& rhs) const
+    {
+        return this->server_name == rhs.server_name;
+    }
     ServerConfig parse_configuration(const std::string& path, bool dry)
     {
         json j;

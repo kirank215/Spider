@@ -24,6 +24,7 @@ namespace http
         VHostConfig& operator=(const VHostConfig&) = default;
         VHostConfig(VHostConfig&&) = default;
         VHostConfig& operator=(VHostConfig&&) = default;
+        bool operator==(const VHostConfig&) const;
 
         ~VHostConfig() = default;
         std::string ip;     // possibly a socket?
