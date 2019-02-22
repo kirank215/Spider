@@ -23,48 +23,49 @@ Dispatcher http::dispatcher;
 
 int main(int argc, char *argv[])
 {
-    bool dry = 0;
-    if(argc >3 || argc <= 1)
-        throw std::logic_error("Invalid number of arguments");
-    if(strcmp(argv[1],"-t") == 0)
-        dry = 1;
-    ServerConfig sc;
     try
     {
+        bool dry = 0;
+        if(argc >3 || argc <= 1)
+            throw std::logic_error("Invalid number of arguments");
+        if(strcmp(argv[1],"-t") == 0)
+            dry = 1;
+        ServerConfig sc;
         sc = parse_configuration(argv[dry+1], dry);
+
+        dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
+
+        /* Dont knwo whether to be done here or listener*/
+        /*Doing only ipv4 now*/
+        auto sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
+        auto sha_sock = std::make_shared<DefaultSocket>(sock);
+
+        AddrInfoHint hints;
+        hints.family(AF_INET);
+        hints.socktype(SOCK_STREAM);
+
+        //server socket creation and binding
+        VHostConfig vc = sc.list_vhost[0];
+        auto vstatic = VHostFactory::Create(vc);
+        const char *port = std::to_string(vc.port).c_str();
+        const char *ip = vc.ip.c_str();
+        AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
+        sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
+        sha_sock->listen(10);
+
+        //calling listener
+        /*EventWatcherRegistry event_register();*/
+        event_register.register_ew<ListenerEW>(sha_sock);
+        EventLoop loop = event_register.loop_get();
+        loop();
+
+
     }
     catch(std::exception& e)
     {
-        std::cerr << e.what();
+        std::cerr << "\n" << e.what();
         exit(1);
     }
-
-    dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
-
-    /* Dont knwo whether to be done here or listener*/
-    /*Doing only ipv4 now*/
-    auto sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
-    auto sha_sock = std::make_shared<DefaultSocket>(sock);
-
-    AddrInfoHint hints;
-    hints.family(AF_INET);
-    hints.socktype(SOCK_STREAM);
-
-    //server socket creation and binding
-    VHostConfig vc = sc.list_vhost[0];
-    auto vstatic = VHostFactory::Create(vc);
-    const char *port = std::to_string(vc.port).c_str();
-    const char *ip = vc.ip.c_str();
-    AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
-    sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
-
-    //calling listener
-    /*EventWatcherRegistry event_register();*/
-    event_register.register_ew<ListenerEW>(sha_sock);
-    EventLoop loop = event_register.loop_get();
-    loop();
-
-
 
 
     /*TESTING PARSING
