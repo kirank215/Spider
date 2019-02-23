@@ -11,11 +11,15 @@ namespace http
             const Request& r = er.get_request();
             for (auto& h : r.headers_)
             {
-                if(h.first == "host")
+                if(h.first == "Host")
                 {
+                    size_t colon = h.second.find(":");  // h.second = host:port
+                    std::string host = h.second.substr(1, colon-1);
+                    std::string port = h.second.substr(colon+1);
                     for(auto& conf : hosts_.list_vhost)      // hosts_ ->  list of vhostsconfigs
                     {
-                        if(conf.server_name == h.second)
+                        std::string dport = std::to_string(conf.port);  // port of vhost from serverconfig
+                        if(conf.server_name == host && dport == port)
                         {
                             Connection c(conf, er.get_sock(), conf.port);
 //                            connections_.insert(c);
