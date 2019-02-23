@@ -9,6 +9,7 @@ Implement event loop [T]
 Implement listener [T]
 Implement requests [T]
 Implement responses [O] - Need to implement GET and POST and status codes -
+Register and Unregister Properly [O]
 
 --- Configuration file handling [V]
 

@@ -46,7 +46,7 @@ namespace http
     {
         s += "HTTP/1.1 "; // version with SP
         auto status = statusCode(r.status_);   // pair of CODE, string
-        s += status.first;
+        s += std::to_string(status.first);
         s += " ";
         s += status.second;
         s += "\r\n";
@@ -69,6 +69,8 @@ namespace http
         add_headers(resp_str, res_.headers_);
         resp_str += res_.msg_body_;
         sock_->send(resp_str.c_str(), resp_str.length());
+  //      event_register.unregister_ew(*this);
+        event_register.register_ew<EventRequest>(sock_);
 
     }
 }

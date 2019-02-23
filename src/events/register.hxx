@@ -19,6 +19,7 @@ namespace http
         auto to_remove = events_.find(ew);
         if (to_remove == events_.end())
             return false;
+        loop_.unregister_watcher(ew);
         events_.erase(to_remove);
         return true;
     }
