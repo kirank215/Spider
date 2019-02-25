@@ -9,7 +9,7 @@ http::EventLoop::EventLoop()
 // Is this necessary ?
 http::EventLoop::~EventLoop()
 {
-    ev_loop_destroy(loop);
+//    ev_loop_destroy(loop);
 }
 
 // ADD ERROR HANDLING ?
