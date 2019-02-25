@@ -13,7 +13,7 @@ http::ListenerEW::ListenerEW(shared_socket socket)
     : EventWatcher(socket->fd_get()->fd_, EV_READ)
 {
     sock_ = socket;
-    struct sockaddr* addr = new sockaddr();
+    struct sockaddr* addr = new sockaddr();     // FIXME leak
     socklen_t len = sizeof(addr);
     if (getsockname(socket->fd_get()->fd_, addr, &len) == -1)
         std::cerr
