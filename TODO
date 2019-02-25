@@ -23,3 +23,10 @@ Register and Unregister Properly [O]
 
 --- Authentication [X]
 
+
+--------
+GET POST HEAD [ ]
+NON BLOCKING IO [ ]
+IPv6 [ ]
+STATIC FILE SERVER [ ]
+GRACEFUL EXIT [ ]

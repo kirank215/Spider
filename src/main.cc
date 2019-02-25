@@ -35,7 +35,6 @@ int main(int argc, char *argv[])
 
         dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
 
-        /* Dont knwo whether to be done here or listener*/
         /*Doing only ipv4 now*/
         auto sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
         auto sha_sock = std::make_shared<DefaultSocket>(sock);
@@ -66,7 +65,7 @@ int main(int argc, char *argv[])
         std::cerr << "\n" << e.what();
         exit(1);
     }
-
+    return 0;
 
     /*TESTING PARSING
       for(auto it = sc.list_vhost.begin(); it != sc.list_vhost.end(); it++)
