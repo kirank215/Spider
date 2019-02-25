@@ -1,3 +1,4 @@
+#include <iostream>
 #include "event-loop.hh"
 
 http::EventLoop::EventLoop()
@@ -8,7 +9,7 @@ http::EventLoop::EventLoop()
 // Is this necessary ?
 http::EventLoop::~EventLoop()
 {
-    ev_loop_destroy(loop);
+//    ev_loop_destroy(loop);
 }
 
 // ADD ERROR HANDLING ?
@@ -27,7 +28,28 @@ void http::EventLoop::register_sigint_watcher(ev_signal* sig) const
     ev_signal_start(loop, sig);
 }
 
+static void signal_callback(struct ev_loop* loop, ev_signal* , int)
+{
+    ev_break(loop, EVBREAK_ALL);
+    throw "SIGINT captured\n";
+}
+
+static void timer_callback(struct ev_loop*, ev_timer* , int)
+{
+    std::cout << " TIMEOUT \n";
+}
+
 void http::EventLoop::operator()() const
 {
+/*
+    // Timer
+    ev_timer time;
+    ev_timer_init (&time, timer_callback, 10., 0.);  // change 0. to 'x' to repeat loop after 'x' seconds
+    ev_timer_start (loop, &time);
+
+    ev_signal signal;
+    ev_signal_init (&signal, signal_callback, SIGINT);
+    this->register_sigint_watcher(&signal);
+*/
     ev_run(loop, 0);
 }

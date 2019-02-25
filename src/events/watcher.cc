@@ -38,6 +38,7 @@ namespace http
         dispatcher.respond(req_, *c);
 
         // FIXME use connection to send response
+        event_register.unregister_ew((EventWatcher *) this);
         event_register.register_ew<EventResponse>(sock_, req_);
         // call response
     }
@@ -69,8 +70,8 @@ namespace http
         add_headers(resp_str, res_.headers_);
         resp_str += res_.msg_body_;
         sock_->send(resp_str.c_str(), resp_str.length());
-  //      event_register.unregister_ew(*this);
-        event_register.register_ew<EventRequest>(sock_);
+        event_register.unregister_ew((EventWatcher *) this);
+//        event_register.register_ew<EventRequest>(sock_);
 
     }
 }
