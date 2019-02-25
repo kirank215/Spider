@@ -60,6 +60,7 @@ namespace http
             resp_str += x.first;
             resp_str += ": ";
             resp_str += x.second;
+            resp_str += "\r\n";
         }
     }
 

@@ -9,7 +9,7 @@ http::EventLoop::EventLoop()
 // Is this necessary ?
 http::EventLoop::~EventLoop()
 {
-//    ev_loop_destroy(loop);
+    ev_loop_destroy(loop);
 }
 
 // ADD ERROR HANDLING ?
@@ -45,7 +45,7 @@ void http::EventLoop::operator()() const
 {
     // Timer
     ev_timer time;
-    ev_timer_init (&time, timer_callback, 10., 0.);  // change 0. to 'x' to repeat loop after 'x' seconds
+    ev_timer_init (&time, timer_callback, 100., 0.);  // change 0. to 'x' to repeat loop after 'x' seconds
     ev_timer_start (loop, &time);
 
     ev_signal signal;
