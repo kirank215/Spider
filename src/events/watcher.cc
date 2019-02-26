@@ -16,7 +16,8 @@ namespace http
 
     EventResponse::EventResponse(shared_socket sock, const Response& r)
     :EventWatcher(sock->fd_get()->fd_, EV_WRITE), sock_(sock), res_(r)
-    {}
+    {
+    }
 
     const Request& EventRequest::get_request() const
     {
@@ -33,12 +34,12 @@ namespace http
         //add to the register of sockets
         auto c = dispatcher.create_connection(*this);
         if(!c)
-            throw std::logic_error("Unable to form connection");
+            throw "Unable to form connection.";
         dispatcher.respond(req_, *c);
 
         // FIXME use connection to send response
         event_register.unregister_ew((EventWatcher *) this);
- //       event_register.register_ew<EventResponse>(sock_, req_);
+        event_register.register_ew<EventResponse>(sock_, req_);
         // call response
     }
 

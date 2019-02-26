@@ -24,9 +24,9 @@ Register and Unregister Properly [O]
 --- Authentication [X]
 
 
---------STEP 1----------
-GET POST HEAD       [ ]
-NON BLOCKING IO     [ ]
-IPv6                [ ]
-STATIC FILE SERVER  [ ]
-
+--------
+GET POST HEAD [ ]
+NON BLOCKING IO [ ]
+IPv6 [ ]
+STATIC FILE SERVER [ ]
+GRACEFUL EXIT [ ]

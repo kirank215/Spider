@@ -32,10 +32,22 @@ static void signal_callback(struct ev_loop* loop, ev_signal* , int)
 {
     std::cerr << "\nSIGINT captured\n";
     ev_break(loop, EVBREAK_ALL);
+    exit(1);
+}
+
+static void timer_callback(struct ev_loop* loop, ev_timer* , int)
+{
+    std::cout << " TIMEOUT \n";
+    ev_break(loop, EVBREAK_ONE);
 }
 
 void http::EventLoop::operator()() const
 {
+    // Timer
+    ev_timer time;
+    ev_timer_init (&time, timer_callback, 100., 0.);  // change 0. to 'x' to repeat loop after 'x' seconds
+    ev_timer_start (loop, &time);
+
     ev_signal signal;
     ev_signal_init (&signal, signal_callback, SIGINT);
     this->register_sigint_watcher(&signal);

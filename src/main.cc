@@ -57,6 +57,8 @@ int main(int argc, char *argv[])
         event_register.register_ew<ListenerEW>(sha_sock);
         EventLoop loop = event_register.loop_get();
         loop();
+
+
     }
     catch(std::exception& e)
     {
