@@ -11,8 +11,7 @@ printf "\n"
 
 printf "\n"
 echo -e "${YELLOW} CURL - with IP ${NC}"
-curl -i "http://127.0.0.1:8000""
-printf "curl -i "http://127.0.0.1:8000"
+curl -i "http://127.0.0.1:8000"
 printf "\n"
 
 
