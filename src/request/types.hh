@@ -25,7 +25,8 @@ namespace http
         NOT_IMPLEMENTED = 501,
         BAD_GATEWAY = 502,
         GATEWAY_TIMEOUT = 504,
-        HTTP_VERSION_NOT_SUPPORTED = 505
+        HTTP_VERSION_NOT_SUPPORTED = 505,
+        SHOULD_NOT_HAPPEN
     };
 
     /**
@@ -41,6 +42,7 @@ namespace http
         {
         case OK:
             return {OK, "OK"};
+            break;
         case BAD_REQUEST:
             return {BAD_REQUEST, "Bad Request"};
         case FORBIDDEN:
@@ -61,6 +63,8 @@ namespace http
             return {GATEWAY_TIMEOUT, "Gateway Timeout"};
         case HTTP_VERSION_NOT_SUPPORTED:
             return {HTTP_VERSION_NOT_SUPPORTED, "HTTP Version Not Supported"};
+        case SHOULD_NOT_HAPPEN:
+            throw std::logic_error("UNSET STATUS CODE");
         default:
             throw std::logic_error("unknown status_code");
         }
