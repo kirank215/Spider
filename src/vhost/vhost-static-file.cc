@@ -29,6 +29,7 @@ namespace http
             st = OK;
         }
         Response resp(req, st, out);
-        event_register.register_ew<EventResponse>(c.s_, resp);
+        auto resp_sock = c.s_;
+        event_register.register_ew<EventResponse>(resp_sock, resp);
     }
 }
