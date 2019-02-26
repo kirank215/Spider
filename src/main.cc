@@ -42,8 +42,9 @@ int main(int argc, char *argv[])
         dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
 
         /*Doing only ipv4 now*/
-        auto sock = DefaultSocket(AF_INET, SOCK_STREAM, 0);
-        auto sha_sock = std::make_shared<DefaultSocket>(sock);
+        auto sha_sock = std::make_shared<DefaultSocket>(AF_INET, SOCK_STREAM, 0);
+
+        sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
 
         AddrInfoHint hints;
         hints.family(AF_INET);

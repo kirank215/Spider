@@ -17,8 +17,6 @@ http::ListenerEW::ListenerEW(shared_socket socket)
     socklen_t len = sizeof(addr);
     if (getsockname(socket->fd_get()->fd_, addr, &len) == -1)
         throw std::logic_error("Listener constructor: trying to intialize with bad socket");
-    struct sockaddr_in* addr_in = reinterpret_cast<sockaddr_in*>(addr);
-    std::cout << addr_in->sin_port;
     delete addr;
 }
 
@@ -28,5 +26,6 @@ void http::ListenerEW::operator()()
     socklen_t len = sizeof(addr);
     auto new_socket = sock_->accept(&addr, &len);
     http::event_register.register_ew<EventRequest>(new_socket);
+
 }
 
