@@ -42,7 +42,8 @@ void http::Response::build_head()
     msg_body_ = "";
     auto time =
         std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    headers_.emplace("Date", std::ctime(&time));
+    std::string t = std::ctime(&time);
+    headers_.emplace("Date", t.erase(t.size() - 1 ));     // removes trailing \n
     headers_.emplace("Content-Length", "0");
 }
 
@@ -51,7 +52,8 @@ void http::Response::build_get(std::string& body)
     msg_body_ = body;
     auto time =
         std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    headers_.emplace("Date", std::ctime(&time));
+    std::string t = std::ctime(&time);
+    headers_.emplace("Date", t.erase(t.size() - 1 ));     // removes trailing \n
     headers_.emplace("Content-Length", std::to_string(body.length()));
 }
 
@@ -60,7 +62,8 @@ void http::Response::build_post()
     msg_body_ = "";
     auto time =
         std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    headers_.emplace("Date", std::ctime(&time));
+    std::string t = std::ctime(&time);
+    headers_.emplace("Date", t.erase(t.size() - 1 ));     // removes trailing \n
     headers_.emplace("Content-Length", "0");
 }
 
@@ -74,13 +77,14 @@ http::Response::Response(const Request& request, const STATUS_CODE& st,
         status_ = BAD_REQUEST;
     else
     {
+        headers_ = request.headers_;
+//        msg_body_ = request.msg_body_;
+
         if (request.m_ == HEAD)
             build_head();
         if (request.m_ == GET)
             build_get(body);
         if (request.m_ == POST)
             build_post();
-        headers_ = request.headers_;
-        msg_body_ = request.msg_body_;
     }
 }

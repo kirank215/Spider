@@ -78,7 +78,7 @@ namespace http
             auto it = headers_.find("Connection");  // Remove this block
             it->second = "close";                    // in later parts
             max = i + msg_body_len_;
-            while(i <= max && i <= len)
+            while(i < max && i < len)
             {
                 msg_body_.push_back(buffer[i]);
                 i++;
