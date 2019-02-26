@@ -35,11 +35,11 @@ namespace http
         auto c = dispatcher.create_connection(*this);
         if(!c)
             throw "Unable to form connection.";
+
         dispatcher.respond(req_, *c);
 
         // FIXME use connection to send response
         event_register.unregister_ew((EventWatcher *) this);
-        event_register.register_ew<EventResponse>(sock_, req_);
         // call response
     }
 
@@ -62,6 +62,7 @@ namespace http
             resp_str += x.second;
             resp_str += "\r\n";
         }
+        resp_str += "\r\n";
     }
 
     void EventResponse::operator()()
@@ -70,6 +71,7 @@ namespace http
         build_statusline(resp_str, res_);
         add_headers(resp_str, res_.headers_);
         resp_str += res_.msg_body_;
+        resp_str += "\r\n";
         sock_->send(resp_str.c_str(), resp_str.length());
         event_register.unregister_ew((EventWatcher *) this);
 //        event_register.register_ew<EventRequest>(sock_);

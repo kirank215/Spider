@@ -1,5 +1,6 @@
 #include <fstream>
 #include "request/response.hh"
+#include "events/register.hh"
 
 #include "events/watcher.hh"
 #include "vhost/vhost-static-file.hh"
@@ -15,7 +16,7 @@ namespace http
             remaining_iterator, remaining_iterator)
     {
         STATUS_CODE st;
-        std::string path = req.request_uri_ + c.vc_.root;
+        std::string path = c.vc_.root + req.request_uri_ ;
         std::string out;
         std::string line;
         std::ifstream f(path);
@@ -28,6 +29,6 @@ namespace http
             st = OK;
         }
         Response resp(req, st, out);
-        EventResponse er(c.s_, resp);
+        event_register.register_ew<EventResponse>(c.s_, resp);
     }
 }
