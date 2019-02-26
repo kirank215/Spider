@@ -11,7 +11,8 @@ namespace http
 
     DefaultSocket::DefaultSocket(const misc::shared_fd& fd)
         : Socket{fd}
-    {}
+    {
+    }
 
     ssize_t DefaultSocket::recv(void* dst, size_t len)
     {
@@ -43,8 +44,7 @@ namespace http
     {
         auto res = sys::accept(*fd_, addr, addrlen);
         auto res1 = std::make_shared<misc::FileDescriptor>(std::move(res));
-        auto res2 = DefaultSocket(res1);
-        auto result = std::make_shared<DefaultSocket>(res2);
+        auto result = std::make_shared<DefaultSocket>(res1);
         return result;
     }
     void DefaultSocket::connect(const sockaddr* addr, socklen_t addrlen)

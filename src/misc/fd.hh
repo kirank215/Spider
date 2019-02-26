@@ -8,7 +8,7 @@
 #include <memory>
 #include <unistd.h>
 #include <utility>
-
+#include <iostream>
 #include "misc/sys-wrapper.hh"
 
 namespace misc
@@ -29,7 +29,8 @@ namespace misc
 
         ~FileDescriptor()
         {
-            close(fd_);
+            if(fd_ != -1)
+                close(fd_);
         };
 
         FileDescriptor(const FileDescriptor&) = delete;
