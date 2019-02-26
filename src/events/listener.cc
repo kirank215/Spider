@@ -29,3 +29,4 @@ void http::ListenerEW::operator()()
     auto new_socket = sock_->accept(&addr, &len);
     http::event_register.register_ew<EventRequest>(new_socket);
 }
+

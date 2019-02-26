@@ -23,15 +23,21 @@ Dispatcher http::dispatcher;
 
 int main(int argc, char *argv[])
 {
-    try
-    {
         bool dry = 0;
         if(argc >3 || argc <= 1)
             throw std::logic_error("Invalid number of arguments");
         if(strcmp(argv[1],"-t") == 0)
             dry = 1;
         ServerConfig sc;
+    try
+    {
         sc = parse_configuration(argv[dry+1], dry);
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << "\n" << e.what();
+        return 1;
+    }
 
         dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
 
@@ -46,25 +52,21 @@ int main(int argc, char *argv[])
         //server socket creation and binding
         VHostConfig vc = sc.list_vhost[0];
         auto vstatic = VHostFactory::Create(vc);
+
+        dispatcher.insert_staticfile(vstatic);
         const char *port = std::to_string(vc.port).c_str();
         const char *ip = vc.ip.c_str();
         AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
         sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
         sha_sock->listen(10);
 
+
         //calling listener
         /*EventWatcherRegistry event_register();*/
         event_register.register_ew<ListenerEW>(sha_sock);
-        EventLoop loop = event_register.loop_get();
-        loop();
+        event_register.loop_get()();
 
 
-    }
-    catch(std::exception& e)
-    {
-        std::cerr << "\n" << e.what();
-        exit(1);
-    }
     return 0;
 
     /*TESTING PARSING
