@@ -42,7 +42,6 @@ namespace http
         {
         case OK:
             return {OK, "OK"};
-            break;
         case BAD_REQUEST:
             return {BAD_REQUEST, "Bad Request"};
         case FORBIDDEN:

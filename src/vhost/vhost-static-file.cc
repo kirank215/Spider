@@ -22,18 +22,13 @@ namespace http
         std::ifstream f(path);
         if(!f.is_open())
             st = NOT_FOUND;
-        else if(req.m_ == GET)
+        else if(req.m_ == GET || req.m_ == POST)
         {
             while(std::getline(f, line))
                 out += line;
             st = OK;
+            // POST same as GET for now. Change for later stages
         }
-        else if(req.m_ == POST)
-        {
-            st = OK;
-            // For later stages
-        }
-
         else if(req.m_ == HEAD)
         {
             st = OK;
