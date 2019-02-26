@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -41,13 +42,8 @@ int main(int argc, char *argv[])
 
         dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
 
-        /*Doing only ipv4 now*/
-        auto sha_sock = std::make_shared<DefaultSocket>(AF_INET, SOCK_STREAM, 0);
-
-        sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
-
         AddrInfoHint hints;
-        hints.family(AF_INET);
+        hints.family(AF_UNSPEC);
         hints.socktype(SOCK_STREAM);
 
         //server socket creation and binding
@@ -58,7 +54,45 @@ int main(int argc, char *argv[])
         const char *port = std::to_string(vc.port).c_str();
         const char *ip = vc.ip.c_str();
         AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
-        sha_sock->bind(addrinfo.begin()->ai_addr, addrinfo.begin()->ai_addrlen);
+/*
+        for(auto &i : addrinfo)
+        {
+            if(i.ai_family == AF_INET)
+            {
+                struct sockaddr_in *ipv4 = (struct sockaddr_in *)i.ai_addr;
+                i.ai_addr->sockaddr = ipv4;
+            }
+            else
+            {
+                struct sockaddr_in *ipv6 = (struct sockaddr_in6 *)i.ai_addr;
+                i.ai_addr = ipv6;
+            }
+        }
+*/
+        std::shared_ptr<DefaultSocket> sha_sock;
+        if((*addrinfo.begin()).ai_family == AF_INET)
+            sha_sock = std::make_shared<DefaultSocket>
+                (AF_INET , SOCK_STREAM, 0);
+        else
+        {
+            sha_sock = std::make_shared<DefaultSocket>
+                (AF_INET6 , SOCK_STREAM, 0);
+            sha_sock->ipv6_set(true);
+        }
+        sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
+        sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
+
+        for(auto &i : addrinfo)
+        {
+            try 
+            {
+                sha_sock->bind(i.ai_addr, i.ai_addrlen);
+            }
+            catch(std::system_error&)
+            {
+                continue;
+            }
+        }
         sha_sock->listen(10);
 
 
