@@ -2,6 +2,7 @@
 #include "request/response.hh"
 
 #include "events/watcher.hh"
+#include "events/register.hh"
 #include "vhost/vhost-static-file.hh"
 #include "vhost/connection.hh"
 
@@ -28,6 +29,6 @@ namespace http
             st = OK;
         }
         Response resp(req, st, out);
-        EventResponse er(c.s_, resp);
+        event_register.register_ew<EventResponse>(c.s_, resp);
     }
 }
