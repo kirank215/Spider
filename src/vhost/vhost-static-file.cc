@@ -15,7 +15,7 @@ namespace http
     void VHostStaticFile::respond(const Request& req, Connection c,
             remaining_iterator, remaining_iterator)
     {
-        STATUS_CODE st;
+        STATUS_CODE st = SHOULD_NOT_HAPPEN;
         std::string path = c.vc_.root + req.request_uri_ ;
         std::string out;
         std::string line;
@@ -26,6 +26,16 @@ namespace http
         {
             while(std::getline(f, line))
                 out += line;
+            st = OK;
+        }
+        else if(req.m_ == POST)
+        {
+            st = OK;
+            // For later stages
+        }
+
+        else if(req.m_ == HEAD)
+        {
             st = OK;
         }
         Response resp(req, st, out);

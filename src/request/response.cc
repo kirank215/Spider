@@ -5,7 +5,7 @@
 #include <string>
 
 http::Response::Response(const STATUS_CODE& st)
-    : status_(st)
+    : status_{st}
 {
     headers_ = std::map<std::string, std::string>();
     msg_body_ = "";
@@ -68,16 +68,30 @@ void http::Response::build_post()
     headers_.emplace("Content-Length", "0");
 }
 
+static void known_methods(std::string& body)
+{
+    body = "The known methods include ";
+    for( auto& x : http::methods)
+    {
+        if(x.second != http::KNOWN)
+            body += x.first + " ";
+    }
+    body += ".";
+}
+
 http::Response::Response(const Request& request, const STATUS_CODE& st,
                             std::string body)
-    : status_(st)
 {
+    status_ = st;
     if (request.m_ == BAD) // Got a bad method.
         status_ = BAD_REQUEST;
     if (!check_headers())
         status_ = BAD_REQUEST;
     else if(request.m_ == KNOWN)
+    {
         status_ = METHOD_NOT_ALLOWED;
+        known_methods(msg_body_);
+    }
     else if(request.version_ != "HTTP/1.1")
     {
         status_ = UPGRADE_REQUIRED;
