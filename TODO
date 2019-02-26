@@ -5,23 +5,21 @@ X : Not started
 
 Priority :
 
-Implement event loop [T]
-Implement listener [T]
-Implement requests [T]
-Implement responses [O] - Need to implement GET and POST and status codes -
-Register and Unregister Properly [O]
+Implement event loop                                                        [V]
+Implement listener                                                          [V]
+Implement requests                                                          [V]
 
---- Configuration file handling [V]
+--- Configuration file handling                                             [V]
 
---- Event Loop [T]
+--- Event Loop                                                              [V]
 
---- Implementing Vhosts [T]
+--- Implementing Vhosts                                                     [O]
 
---- Reverse Proxy [X]
+--- Reverse Proxy                                                           [X]
 
---- SSL Termination [X]
+--- SSL Termination                                                         [X]
 
---- Authentication [X]
+--- Authentication                                                          [X]
 
 
 -------- STEP 1 ----------
