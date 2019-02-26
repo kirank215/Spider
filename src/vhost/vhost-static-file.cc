@@ -22,7 +22,7 @@ namespace http
         std::ifstream f(path);
         if(!f.is_open())
             st = NOT_FOUND;
-        else
+        else if(req.m_ == GET)
         {
             while(std::getline(f, line))
                 out += line;

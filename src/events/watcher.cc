@@ -38,7 +38,6 @@ namespace http
 
         dispatcher.respond(req_, *c);
 
-        // FIXME use connection to send response
         event_register.unregister_ew((EventWatcher *) this);
         // call response
     }
