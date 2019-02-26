@@ -57,6 +57,7 @@ void http::Response::build_get(std::string& body)
     headers_.emplace("Content-Length", std::to_string(body.length()));
 }
 
+// same as get for the moment
 void http::Response::build_post()
 {
     msg_body_ = "";
@@ -75,6 +76,13 @@ http::Response::Response(const Request& request, const STATUS_CODE& st,
         status_ = BAD_REQUEST;
     if (!check_headers())
         status_ = BAD_REQUEST;
+    else if(request.m_ == KNOWN)
+        status_ = METHOD_NOT_ALLOWED;
+    else if(request.version_ != "HTTP/1.1")
+    {
+        status_ = UPGRADE_REQUIRED;
+        msg_body_ = "This service requires an " + request.version_ + " protocol.";
+    }
     else
     {
         headers_ = request.headers_;
