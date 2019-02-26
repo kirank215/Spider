@@ -14,12 +14,18 @@ namespace http
                 if(h.first == "Host")
                 {
                     size_t colon = h.second.find(":");  // h.second = host:port
-                    std::string host = h.second.substr(1, colon-1);
-                    std::string port = h.second.substr(colon+1);
+                    std::string port = "";        // in case of nc
+                    std::string host = h.second.substr(1);
+                    if (colon != std::string::npos)        // with curl
+                    {
+                        host = h.second.substr(1, colon-1);
+                        port = h.second.substr(colon+1);
+                    }
                     for(auto& conf : hosts_.list_vhost)      // hosts_ ->  list of vhostsconfigs
                     {
                         std::string dport = std::to_string(conf.port);  // port of vhost from serverconfig
-                        if(conf.server_name == host && dport == port)
+                        if((conf.server_name == host || conf.ip == host) &&
+                                (dport == port || port == ""))
                         {
                             Connection c(conf, er.get_sock(), conf.port);
 //                            connections_.insert(c);
