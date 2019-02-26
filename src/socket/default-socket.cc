@@ -11,8 +11,7 @@ namespace http
 
     DefaultSocket::DefaultSocket(const misc::shared_fd& fd)
         : Socket{fd}
-    {
-    }
+    {}
 
     ssize_t DefaultSocket::recv(void* dst, size_t len)
     {

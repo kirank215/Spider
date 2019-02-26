@@ -76,7 +76,8 @@ namespace http
                 throw std::logic_error("No Host provided");
             }
             auto it = headers_.find("Connection");  // Remove this block
-            it->second = "close";                    // in later parts
+            if(it != headers_.end())
+                it->second = "close";                    // in later parts
             max = i + msg_body_len_;
             while(i < max && i < len)
             {
