@@ -24,8 +24,20 @@ namespace http
         GET,
         POST,
         HEAD,
-        BAD
+        BAD,
+        KNOWN
     };
+    inline std::map<std::string, method> methods =
+        {
+            { "GET" , GET },
+            { "POST" , POST },
+            { "HEAD" , HEAD },
+            { "PUT" , KNOWN },
+            { "DELETE" , KNOWN },
+            { "CONNECT" , KNOWN },
+            { "OPTIONS" , KNOWN },
+            { "TRACE" , KNOWN }
+        };
     struct Request
     {
         Request() = default;

@@ -5,6 +5,7 @@ namespace http
 {
     static method method_type(std::string str)
     {
+    /*
         if(str.compare("GET") == 0)
             return GET;
         else if(str.compare("POST") == 0)
@@ -13,6 +14,11 @@ namespace http
             return HEAD;
         else
             return BAD;
+    */
+        auto m = methods.find(str);
+        if(m != methods.end())
+            return m->second;
+        return BAD;
     }
 
     static std::string get_token(int& pos, std::string delim,
