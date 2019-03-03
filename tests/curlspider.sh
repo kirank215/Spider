@@ -22,7 +22,7 @@ printf "\n"
 
 printf "\n"
 echo -e "${YELLOW} Netcat - Head ${NC}"
-printf 'HEAD /index.txt HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8000
+printf 'HEAD / HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8000
 printf "\n"
 
 
