@@ -53,7 +53,10 @@ namespace misc
          *
          * \return Whether or not the FileDescriptor holds a valid fd.
          */
-        operator bool() const&;
+        operator bool() const&
+        {
+            return (fd_ >= 0);
+        }
 
         /**
          * \brief The fd held by the FileDescriptor object.
