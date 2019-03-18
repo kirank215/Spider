@@ -36,7 +36,9 @@ lib_LTLIBRARIES = libspider.la
 SOURCES = \
           src/config/config.cc \
           src/config/config.hh \
+          src/error/init-error.hh \
           src/error/not-implemented.hh \
+          src/error/parsing-error.hh \
           src/events/event-loop.hh \
           src/events/events.cc \
           src/events/events.hh \
@@ -50,6 +52,12 @@ SOURCES = \
           src/misc/addrinfo/addrinfo.hh \
           src/misc/fd.cc \
           src/misc/fd.hh \
+          src/misc/openssl/base64.cc \
+          src/misc/openssl/base64.hh \
+          src/misc/openssl/ssl-error.cc \
+          src/misc/openssl/ssl-error.hh \
+          src/misc/openssl/ssl-wrapper.hh \
+          src/misc/openssl/ssl.hh \
           src/misc/socket.hh \
           src/misc/sys-wrapper.hh \
           src/misc/unistd.hh \
@@ -62,19 +70,23 @@ SOURCES = \
           src/socket/default-socket.hh \
           src/socket/socket.cc \
           src/socket/socket.hh \
+          src/socket/ssl-socket.hh \
           src/vhost/connection.hh \
           src/vhost/dispatcher.hh \
           src/vhost/vhost-factory.hh \
+          src/vhost/vhost-reverse-proxy.hh \
           src/vhost/vhost-static-file.hh \
           src/vhost/vhost.hh \
           $(NULL)
 
 
+# Compile source files again to avoid silenting undefined references.
 spider_SOURCES = \
                  $(SOURCES) \
                  src/main.cc \
                  $(NULL)
 
+# https://www.gnu.org/software/automake/manual/html_node/Objects-created-both-with-libtool-and-without.html
 spider_CXXFLAGS = $(AM_CXXFLAGS)
 
 libspider_la_SOURCES = \
