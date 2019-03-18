@@ -51,9 +51,8 @@ int main(int argc, char *argv[])
         auto vstatic = VHostFactory::Create(vc);
 
         dispatcher.insert_staticfile(vstatic);
-        const char *port = std::to_string(vc.port).c_str();
-        const char *ip = vc.ip.c_str();
-        AddrInfo addrinfo = misc::getaddrinfo(ip, port, hints);
+        AddrInfo addrinfo = misc::getaddrinfo(vc.ip.c_str(),
+                                    std::to_string(vc.port).c_str(), hints);
 /*
         for(auto &i : addrinfo)
         {
@@ -84,7 +83,7 @@ int main(int argc, char *argv[])
 
         for(auto &i : addrinfo)
         {
-            try 
+            try
             {
                 sha_sock->bind(i.ai_addr, i.ai_addrlen);
             }

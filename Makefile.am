@@ -16,6 +16,7 @@ AM_CXXFLAGS = \
               -Werror=missing-field-initializers \
               -Werror=overloaded-virtual \
               -Wno-inline \
+              -fsanitize=address \
               $(NULL)
 
 AM_LDFLAGS = \
