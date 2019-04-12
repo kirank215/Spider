@@ -25,7 +25,6 @@ AM_LDFLAGS = \
              -lev \
              -lssl \
              -lcrypto \
-             -Wno-unused-command-line-argument \
              $(NULL)
 
 AM_LDFLAGS += \
@@ -36,52 +35,52 @@ bin_PROGRAMS = spider
 lib_LTLIBRARIES = libspider.la
 
 SOURCES = \
-	  src/config/config.cc \
-	  src/config/config.hh \
-	  src/error/not-implemented.hh \
-	  src/events/event-loop.hh \
-	  src/events/event-loop.cc \
-	  src/events/events.cc \
-	  src/events/events.hh \
-	  src/events/listener.cc \
-	  src/events/listener.hh \
-	  src/events/register.hh \
-	  src/events/register.hxx \
-	  src/events/watcher.cc \
-	  src/events/watcher.hh \
-	  src/misc/addrinfo/addrinfo-error.cc \
-	  src/misc/addrinfo/addrinfo-error.hh \
-	  src/misc/addrinfo/addrinfo-iterator.hh \
-	  src/misc/addrinfo/addrinfo.cc \
-	  src/misc/addrinfo/addrinfo.hh \
-	  src/misc/fd.cc \
-	  src/misc/fd.hh \
-	  src/misc/socket.hh \
-	  src/misc/sys-wrapper.hh \
-	  src/misc/unistd.hh \
-	  src/request/error.cc \
-	  src/request/error.hh \
-	  src/request/request.hh\
-	  src/request/request.cc\
-	  src/request/response.hh \
-	  src/request/response.cc \
-	  src/request/types.hh \
-	  src/socket/default-socket.cc \
-	  src/socket/default-socket.hh \
-	  src/socket/socket.cc \
-	  src/socket/socket.hh \
-	  src/vhost/connection.hh \
-	  src/vhost/connection.cc \
-	  src/vhost/dispatcher.hh \
-	  src/vhost/dispatcher.cc \
-	  src/vhost/vhost-factory.hh \
-	  src/vhost/vhost-factory.cc \
-	  src/vhost/vhost-static-file.hh \
-	  src/vhost/vhost-static-file.cc \
-	  src/vhost/vhost.hh \
-	  src/vhost/vhost.cc \
-	  $(NULL)
+          src/config/config.cc \
+          src/config/config.hh \
+          src/error/init-error.hh \
+          src/error/not-implemented.hh \
+          src/error/parsing-error.hh \
+          src/events/event-loop.hh \
+          src/events/events.cc \
+          src/events/events.hh \
+          src/events/listener.hh \
+          src/events/register.hh \
+          src/events/register.hxx \
+          src/misc/addrinfo/addrinfo-error.cc \
+          src/misc/addrinfo/addrinfo-error.hh \
+          src/misc/addrinfo/addrinfo-iterator.hh \
+          src/misc/addrinfo/addrinfo.cc \
+          src/misc/addrinfo/addrinfo.hh \
+          src/misc/fd.cc \
+          src/misc/fd.hh \
+          src/misc/openssl/base64.cc \
+          src/misc/openssl/base64.hh \
+          src/misc/openssl/ssl-error.cc \
+          src/misc/openssl/ssl-error.hh \
+          src/misc/openssl/ssl-wrapper.hh \
+          src/misc/openssl/ssl.hh \
+          src/misc/socket.hh \
+          src/misc/sys-wrapper.hh \
+          src/misc/unistd.hh \
+          src/request/error.cc \
+          src/request/error.hh \
+          src/request/request.hh \
+          src/request/response.hh \
+          src/request/types.hh \
+          src/socket/default-socket.cc \
+          src/socket/default-socket.hh \
+          src/socket/socket.cc \
+          src/socket/socket.hh \
+          src/socket/ssl-socket.hh \
+          src/vhost/connection.hh \
+          src/vhost/dispatcher.hh \
+          src/vhost/vhost-factory.hh \
+          src/vhost/vhost-reverse-proxy.hh \
+          src/vhost/vhost-static-file.hh \
+          src/vhost/vhost.hh \
+          $(NULL)
 
+# Compile source files again to avoid silenting undefined references.
 spider_SOURCES = \
 		 $(SOURCES) \
 		 src/main.cc \

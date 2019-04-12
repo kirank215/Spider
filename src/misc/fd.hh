@@ -47,7 +47,6 @@ namespace misc
         {
             return fd_;
         }
-
         /**
          * \brief Implicit conversion to bool.
          *
@@ -57,7 +56,6 @@ namespace misc
         {
             return (fd_ >= 0);
         }
-
         /**
          * \brief The fd held by the FileDescriptor object.
          */
