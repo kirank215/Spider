@@ -27,11 +27,19 @@ namespace http
         bool operator==(const VHostConfig&) const;
 
         ~VHostConfig() = default;
-        std::string ip;     // possibly a socket?
+        std::string ip;
         std::string server_name;
         uint16_t port;
-        std::string root;
-        std::string default_file;
+        std::string root;                           // mutual exclusive proxy
+        std::string default_file;                   //not allowed if proxy
+        std::string ssl_cert;                       //both
+        std::string ssl_key;                        //or none here
+        //proxy_pass p_pass;
+        std::string auth_basic;                     //both or none
+        std::vector <std::string> auth_basic_users; //here
+        std::string health_endpoint; //nn
+        bool auto_index; //nn, not allowed if proxy
+        bool default_vhost; //nn, need to be unique
     };
 
     /**
@@ -50,6 +58,10 @@ namespace http
         ServerConfig& operator=(ServerConfig&&) = default;
 
         ~ServerConfig() = default;
+        size_t header_max_size;
+        size_t uri_max_size;
+        size_t payload_max_size;
+        bool default_vhost_found;
         std::vector<VHostConfig> list_vhost;
     };
 
