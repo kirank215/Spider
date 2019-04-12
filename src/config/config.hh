@@ -4,7 +4,7 @@
  */
 
 #pragma once
-
+#include <map>
 #include <vector>
 #include <string>
 namespace http
@@ -17,6 +17,15 @@ namespace http
      * dedicated structure is required to store the information related to
      * each one of them.
      */
+    struct proxy_pass
+    {
+        std::string ip;
+        uint16_t port;
+        std::map<std::string, std::string> proxy_set_header;//nn
+        std::vector<std::string> proxy_remove_header;//nn
+        std::map<std::string, std::string> set_header;//nn
+        std::vector<std::string> remove_header;//nn
+    };
     struct VHostConfig
     {
         VHostConfig() = default;
@@ -34,7 +43,7 @@ namespace http
         std::string default_file;                   //not allowed if proxy
         std::string ssl_cert;                       //both
         std::string ssl_key;                        //or none here
-        //proxy_pass p_pass;
+        proxy_pass p_pass;
         std::string auth_basic;                     //both or none
         std::vector <std::string> auth_basic_users; //here
         std::string health_endpoint; //nn
