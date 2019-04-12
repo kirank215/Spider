@@ -28,10 +28,13 @@ namespace http
          *
          * \param conf VHostConfig virtual host configuration.
          */
-        explicit VHost(const VHostConfig&);
+        explicit VHost(const VHostConfig& v)
+        {
+            conf_ = v;
+        }
 
         VHost() = delete;
-        VHost(const VHost&) = delete; //pbl here
+        VHost(const VHost&) = delete;
         VHost& operator=(const VHost&) = delete;
         VHost(VHost&&) = delete;
         VHost& operator=(VHost&&) = delete;
@@ -73,7 +76,7 @@ namespace http
          * Warning: with this unique_ptr syntax, you'll need to instanciate the
          * pointer with both a value and a Deleter function.
          */
-        std::unique_ptr<SSL_CTX, decltype(SSL_CTX_free)*> ssl_ctx_;
+       // std::unique_ptr<SSL_CTX, decltype(SSL_CTX_free)*> ssl_ctx_;
     };
 
     using shared_vhost = std::shared_ptr<VHost>;

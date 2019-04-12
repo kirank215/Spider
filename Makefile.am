@@ -41,11 +41,15 @@ SOURCES = \
           src/error/not-implemented.hh \
           src/error/parsing-error.hh \
           src/events/event-loop.hh \
+          src/events/event-loop.cc \
           src/events/events.cc \
           src/events/events.hh \
           src/events/listener.hh \
+          src/events/listener.cc \
           src/events/register.hh \
           src/events/register.hxx \
+          src/events/watcher.hh \
+          src/events/watcher.cc \
           src/misc/addrinfo/addrinfo-error.cc \
           src/misc/addrinfo/addrinfo-error.hh \
           src/misc/addrinfo/addrinfo-iterator.hh \
@@ -62,21 +66,27 @@ SOURCES = \
           src/misc/socket.hh \
           src/misc/sys-wrapper.hh \
           src/misc/unistd.hh \
-          src/request/error.cc \
           src/request/error.hh \
+          src/request/error.cc \
           src/request/request.hh \
+          src/request/request.cc \
           src/request/response.hh \
+          src/request/response.cc \
           src/request/types.hh \
+          src/socket/socket.hh \
           src/socket/default-socket.cc \
           src/socket/default-socket.hh \
           src/socket/socket.cc \
-          src/socket/socket.hh \
           src/socket/ssl-socket.hh \
-          src/vhost/connection.hh \
-          src/vhost/dispatcher.hh \
-          src/vhost/vhost-factory.hh \
           src/vhost/vhost-reverse-proxy.hh \
+          src/vhost/connection.hh \
+          src/vhost/connection.cc \
+          src/vhost/dispatcher.hh \
+          src/vhost/dispatcher.cc \
+          src/vhost/vhost-factory.hh \
+          src/vhost/vhost-factory.cc \
           src/vhost/vhost-static-file.hh \
+          src/vhost/vhost-static-file.cc \
           src/vhost/vhost.hh \
           $(NULL)
 
