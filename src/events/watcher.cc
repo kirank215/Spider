@@ -72,8 +72,14 @@ namespace http
         resp_str += res_.msg_body_;
         resp_str += "\r\n";
         sock_->send(resp_str.c_str(), resp_str.length());
-        event_register.unregister_ew((EventWatcher *) this);
-//        event_register.register_ew<EventRequest>(sock_);
 
+// reusing connections
+        auto it = res_.headers_.find("Connection");
+        if (it != res_.headers_.end())
+        {
+            if(it->second == "alive" && res_.status_ == OK)
+                event_register.register_ew<EventRequest>(sock_);
+        }
+        event_register.unregister_ew((EventWatcher *) this);
     }
 }
