@@ -40,6 +40,7 @@ namespace http
         json j;
         j = create_json(path);
         struct ServerConfig SC;
+        SC.default_vhost_found = false;
         if(!dry)
         {
             std::vector<VHostConfig> list_vhost;
@@ -50,17 +51,84 @@ namespace http
                     struct VHostConfig v;
                     if(elt[i]["ip"].is_string() &&
                             elt[i]["port"].is_number() &&
-                            elt[i]["server_name"].is_string() &&
-                            elt[i]["root"].is_string())
+                            elt[i]["server_name"].is_string())
                     {
                         v.ip = elt[i]["ip"];
                         v.server_name = elt[i]["server_name"];
                         v.port = elt[i]["port"];
-                        v.root = elt[i]["root"];
-                        if(elt[i]["default_file"].is_string())
-                            v.default_file = elt[i]["default_file"];
+                        if(elt[i]["proxy_pass"])
+                        {
+                            if ((elt[i]["proxy_pass"]["ip"].is_string()) &&
+                                (elt[i]["proxy_pass"]["port"].is_number())
+                                {
+                                    struct Proxy_pass proxy_pass;
+                                    proxy_pass.ip = (elt[i]["proxy_pass"]["ip"];
+                                    proxy_pass.port = elt[i]["proxy_pass"]["port"];
+
+                                    if(elt[i]["proxy_pass"]["proxy_set_header"])
+                                    {
+                                        for()
+                                        {
+
+                                        }
+                                    }
+                                    if(elt[i]["proxy_pass"]["proxy_remove_header"])
+                                    {
+                                        for()
+                                        {
+
+                                        }
+                                        proxy_pass.port = elt[i]["proxy_pass"]["port"];
+                                    }
+                                    if((elt[i]["proxy_pass"]["set_header"])
+                                    {
+                                        for()
+                                        {
+
+                                        }
+                                        proxy_pass.port = elt[i]["proxy_pass"]["port"]
+                                    }
+                                    if(elt[i]["proxy_pass"]["remove_header"])
+                                    {
+                                        for()
+                                        {
+
+                                        }
+                                        proxy_pass.port = elt[i]["proxy_pass"]["port"];
+                                    }
+                                    v.proxy_pass = proxy_pass;
+                                }
+                        }
                         else
-                            v.default_file = "index.html";
+                        {
+                            v.root = elt[i]["root"];
+                            if(elt[i]["default_file"].is_string())
+                                v.default_file = elt[i]["default_file"];
+                            else
+                                v.default_file = "index.html";
+                        }
+                        if(elt[i]["ssl_cert"] && elt[i]["ssl_cert"].is_string()
+                            && elt[i]["ssl_key"] && elt[i]["ssl_key"].is_string())
+                        {
+                            v.ssl_cert = elt[i]["ssl_cert"];
+                            v.ssl_key = elt[i]["ssl_key"];
+                        }
+                        if(elt[i]["auth_basic_user"]
+                            && elt[i]["auth_basic"] && elt[i]["auth_basic"].is_string())
+                        {
+                            v.auth_basic = elt[i]["auth_basic"];
+                            //list of user for loop to add every strings...
+                        }
+                        if(elt[i]["health_endpoint"])
+                            v.health_endpoint = elt[i]["health_endpoint"];
+                        if(elt[i]["default_vhost"]) // equal to true
+                        {
+                            if(!SC.default_vhost_found)
+                            {
+                                SC.default_vhost_found = true;
+                                //need to set this vhost as the default one
+                            }
+                        }
                         list_vhost.push_back(v);
                     }
                     else

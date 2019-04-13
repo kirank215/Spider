@@ -17,7 +17,7 @@ namespace http
      * dedicated structure is required to store the information related to
      * each one of them.
      */
-    struct proxy_pass
+    struct Proxy_pass
     {
         std::string ip;
         uint16_t port;
@@ -43,7 +43,7 @@ namespace http
         std::string default_file;                   //not allowed if proxy
         std::string ssl_cert;                       //both
         std::string ssl_key;                        //or none here
-        proxy_pass p_pass;
+        Proxy_pass proxy_pass;
         std::string auth_basic;                     //both or none
         std::vector <std::string> auth_basic_users; //here
         std::string health_endpoint; //nn
