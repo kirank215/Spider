@@ -67,6 +67,10 @@ std::shared_ptr<Socket> create_DefaultSocket(
     return sha_sock;
 }
 
+size_t http::Request::header_max_size = 0;
+size_t http::Request::uri_max_size = 0;
+int http::Request::payload_max_size = 0;
+
 int main(int argc, char *argv[])
 {
     bool dry = 0;
