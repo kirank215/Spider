@@ -56,14 +56,14 @@ namespace http
             std::string met = "";
             std::string type = "";
             std::string body = "";
-            incoming_error_ = "";
+            incoming_error_ = http::OK;
             int i = 0;
             int len = sizeof(buffer);
             met = get_token(i, " ", buffer);
             m_ = method_type(met);
             request_uri_ = get_token(i, " ", buffer);
             if(request_uri_.size() > uri_max_size)
-                incoming_error_ = "uri";
+                incoming_error_ = http::URI_TOO_LONG;
             version_ = get_token(i, http_crlf, buffer);
             header_size = met.size() + request_uri_.size()+ version_.size();
             msg_body_len_ = 0;
@@ -80,7 +80,7 @@ namespace http
                 headers_.emplace(type, body);
                 if(header_size > header_max_size)
                 {
-                    incoming_error_ = "headers";
+                    incoming_error_ = HEADER_FIELDS_TOO_LARGE;
                     return;
                 }
                 if(i+2 < len)
@@ -108,8 +108,8 @@ namespace http
                 i++;
                 if(i > payload_max_size)
                 {
-                    if(incoming_error_.compare("") == 0)
-                        incoming_error_ = "payload";
+                    if(incoming_error_ == OK)
+                        incoming_error_ = PAYLOAD_TOO_LARGE;
                     return;
                 }
             }

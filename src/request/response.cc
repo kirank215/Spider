@@ -79,25 +79,13 @@ static void known_methods(std::string& body)
     body += ".";
 }
 
-static http::STATUS_CODE incoming_error(const std::string& err)
-{
-    if(err.compare("uri") == 0)
-        return http::URI_TOO_LONG;
-    else if(err.compare("payload") == 0)
-        return http::PAYLOAD_TOO_LARGE;
-    else if(err.compare("headers") == 0)
-        return http::HEADER_FIELDS_TOO_LARGE;
-    else
-        return http::SHOULD_NOT_HAPPEN;
-}
-
 http::Response::Response(const Request& request, const STATUS_CODE& st,
                             std::string body)
 {
     status_ = st;
-    if (request.incoming_error_.size() > 0)
+    if (request.incoming_error_ != OK)
     {
-        status_ = incoming_error(request.incoming_error_);
+        status_ = request.incoming_error_;
     }
     else if (request.m_ == BAD) // Got a bad method.
         status_ = BAD_REQUEST;

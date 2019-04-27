@@ -54,6 +54,6 @@ namespace http
         std::map<std::string, std::string> headers_;
         int msg_body_len_;
         std::string msg_body_;
-        std::string incoming_error_;
+        http::STATUS_CODE incoming_error_;
     };
 } // namespace http
