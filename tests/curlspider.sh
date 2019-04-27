@@ -59,3 +59,17 @@ echo -e "${YELLOW} Netcat - Bad Request ${NC}"
 printf 'xx /index.text HTTP/1.1\r\nHost: localhost\r\n\r\n' | nc localhost 8000
 printf "\n"
 
+printf "\n"
+echo -e "${YELLOW} Netcat - Headers too long ${NC}"
+printf 'GET /index.text HTTP/3.1\r\nHost: localhost\r\n\r\n' | nc localhost 8000
+printf "\n"
+
+printf "\n"
+echo -e "${YELLOW} Netcat - Uri too long ${NC}"
+printf 'GET /index.texttttttttttttttttttttttttttttttttttttttttttttttttt HTTP/3.1\r\nHost: localhost\r\n\r\n' | nc localhost 8000
+printf "\n"
+
+printf "\n"
+echo -e "${YELLOW} Netcat - Payload too long ${NC}"
+printf 'GET /index.text HTTP/3.1\r\nHost: localhost\r\nContent-Length: 5\r\n\r\nbvoiusaboiuvaiuvbaosiuvbsaoiubvoisubvioausbviasvfdbsdbsdbdsubviusbvi' | nc localhost 8000
+printf "\n"
