@@ -60,5 +60,6 @@ namespace http
         static size_t header_max_size;
         static size_t uri_max_size;
         static int payload_max_size;
+        std::string incoming_error_;
     };
 } // namespace http

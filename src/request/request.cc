@@ -41,6 +41,10 @@ namespace http
     Request::Request(shared_socket new_socket)
     {
         apm.APM_add(apm.APM_, "global_connections_reading");
+        long unsigned int header_max_size = 8000; //FIXME this is default value,
+        long unsigned int uri_max_size = 2000;    //calculate from actual value
+        int payload_max_size = 20;              //from config file later;
+
         char buffer[4096]; //Ususally buffer lenght is 8kb
 
         long unsigned int header_size = 0;
@@ -104,10 +108,17 @@ namespace http
             {
                 msg_body_.push_back(buffer[i]);
                 i++;
+<<<<<<< HEAD
                 if(i > this->payload_max_size)
                 {
                     if(incoming_error_ == OK)
                         incoming_error_ = PAYLOAD_TOO_LARGE;
+=======
+                if(i > payload_max_size)
+                {
+                    if(incoming_error_.compare("") == 0)
+                        incoming_error_ = "payload";
+>>>>>>> Request : added incoming sanity check
                     return;
                 }
             }
