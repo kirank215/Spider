@@ -108,17 +108,10 @@ namespace http
             {
                 msg_body_.push_back(buffer[i]);
                 i++;
-<<<<<<< HEAD
                 if(i > this->payload_max_size)
                 {
                     if(incoming_error_ == OK)
                         incoming_error_ = PAYLOAD_TOO_LARGE;
-=======
-                if(i > payload_max_size)
-                {
-                    if(incoming_error_.compare("") == 0)
-                        incoming_error_ = "payload";
->>>>>>> Request : added incoming sanity check
                     return;
                 }
             }
