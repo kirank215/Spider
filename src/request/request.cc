@@ -39,10 +39,6 @@ namespace http
 
     Request::Request(shared_socket new_socket)
     {
-        long unsigned int header_max_size = 8000; //FIXME this is default value,
-        long unsigned int uri_max_size = 2000;    //calculate from actual value
-        int payload_max_size = 20;              //from config file later;
-
         char buffer[4096]; //Ususally buffer lenght is 8kb
 
         long unsigned int header_size = 0;
@@ -78,7 +74,7 @@ namespace http
                     msg_body_len_ = stoi(body);
                 }
                 headers_.emplace(type, body);
-                if(header_size > header_max_size)
+                if(header_size > this->header_max_size)
                 {
                     incoming_error_ = HEADER_FIELDS_TOO_LARGE;
                     return;
@@ -106,7 +102,7 @@ namespace http
             {
                 msg_body_.push_back(buffer[i]);
                 i++;
-                if(i > payload_max_size)
+                if(i > this->payload_max_size)
                 {
                     if(incoming_error_ == OK)
                         incoming_error_ = PAYLOAD_TOO_LARGE;

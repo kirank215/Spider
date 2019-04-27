@@ -55,5 +55,8 @@ namespace http
         int msg_body_len_;
         std::string msg_body_;
         http::STATUS_CODE incoming_error_;
+        static size_t header_max_size;
+        static size_t uri_max_size;
+        static int payload_max_size;
     };
 } // namespace http
