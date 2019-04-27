@@ -35,6 +35,37 @@ namespace http
     {
         return this->server_name == rhs.server_name;
     }
+
+    int setKeyCert(SSL_CTX* ctx)
+    {
+        SSL_CTX_set_ecdh_auto(ctx, 1);      // ??
+
+        //XXX check on how cert and key are generated
+        if (SSL_CTX_use_certificate_file(ctx, "cert.pem", SSL_FILETYPE_PEM) <= 0) {
+            ERR_print_errors_fp(stderr);
+            return -1;
+        }
+
+        if (SSL_CTX_use_PrivateKey_file(ctx, "key.pem", SSL_FILETYPE_PEM) <= 0 ) {
+            ERR_print_errors_fp(stderr);
+            return -1;
+        }
+
+        // check validity of key
+        if ( !SSL_CTX_check_private_key(ctx) )
+        {
+            std::cerr << "Private key does not match the public certificate\n";
+            return -1;
+        }
+        return 1;
+    }
+
+    ~ServerConfig()
+    {
+        if(this.sc != NULL)
+            SSL_CTX_free(ctx);
+    }
+
     ServerConfig parse_configuration(const std::string& path, bool dry)
     {
         json j;
@@ -182,5 +213,17 @@ namespace http
             SC.list_vhost = list_vhost;
         }
         return SC;
+    }
+
+    void InitServerCTX(ServerConfig sc)
+    {
+        // setup
+        OpenSSl_add_all_algorithms();
+        SSL_load_error_strings();
+
+        const SSL_METHOD* method = SSLv23_server_method;
+        sc.ctx = SSL_CTX_new(method);
+        if(sc.ctx == NULL)
+             ERR_print_errors_fp(stderr);
     }
 }

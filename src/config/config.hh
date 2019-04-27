@@ -7,6 +7,9 @@
 #include <map>
 #include <vector>
 #include <string>
+#include <openssl/ssl.h>
+#include <openssl/error.h>
+
 namespace http
 {
     /**
@@ -48,8 +51,10 @@ namespace http
         std::vector <std::string> auth_basic_users; //here
         std::string health_endpoint; //nn
         bool auto_index; //nn, not allowed if proxy
-        bool default_vhost; //nn, need to be unique
+        bool default_vhost; //nn, needs to be unique
     };
+
+    int set_KeyCert();     // possibly for every host
 
     /**
      * \struct ServerConfig
@@ -66,13 +71,14 @@ namespace http
         ServerConfig(ServerConfig&&) = default;
         ServerConfig& operator=(ServerConfig&&) = default;
 
-        ~ServerConfig() = default;
+        ~ServerConfig();
         size_t header_max_size;
         size_t uri_max_size;
         size_t payload_max_size;
         bool default_vhost_found;
         std::vector<VHostConfig> list_vhost;
         VHostConfig default_vhost;
+        SSL_CTX *ctx = NULL;
     };
 
     /**
@@ -83,4 +89,24 @@ namespace http
      * \return The server configuration.
      */
     ServerConfig parse_configuration(const std::string& path, bool dry);
+
+
+    /**
+     * \brief Initialise SSL-server for the given server.
+     *
+     * \param sc The server for which ssl-server has to be initialised
+     *
+     */
+    void InitServerCTX(ServerConfig sc)
+    {
+        // setup
+        OpenSSl_add_all_algorithms();
+        SSL_load_error_strings();
+
+        const SSL_METHOD* method = SSLv23_server_method;
+        sc.ctx = SSL_CTX_new(method);
+        if(sc.ctx == NULL)
+             ERR_print_errors_fp(stderr);
+    }
+
 } // namespace http
