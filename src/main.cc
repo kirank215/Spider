@@ -51,62 +51,75 @@ int main(int argc, char *argv[])
     hints.socktype(SOCK_STREAM);
 
     //server socket creation and binding
-    for(VHostConfig vc : sc.list_vhost)
+    InitServerCTX(sc);
+
+    if(sc.ctx == NULL)      // error during ssl init
+        return;
+
+    if(setKeyCert(sc.ctx) == -1)    // set key and certificate of host
+        return;                     // add SNI for flexibilty with more vhosts
+
+    dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
+
+    AddrInfoHint hints;
+    hints.family(AF_UNSPEC);
+    hints.socktype(SOCK_STREAM);
+
+    //server socket creation and binding
+    VHostConfig vc = sc.list_vhost[0];
+    auto vstatic = VHostFactory::Create(vc);
+
+    dispatcher.insert_staticfile(vstatic);
+    AddrInfo addrinfo = misc::getaddrinfo(vc.ip.c_str(),
+            std::to_string(vc.port).c_str(), hints);
+    /*
+       for(auto &i : addrinfo)
+       {
+       if(i.ai_family == AF_INET)
+       {
+       struct sockaddr_in *ipv4 = (struct sockaddr_in *)i.ai_addr;
+       i.ai_addr->sockaddr = ipv4;
+       }
+       else
+       {
+       struct sockaddr_in *ipv6 = (struct sockaddr_in6 *)i.ai_addr;
+       i.ai_addr = ipv6;
+       }
+       }
+     */
+    std::shared_ptr<DefaultSocket> sha_sock;
+    if((*addrinfo.begin()).ai_family == AF_INET)
+        sha_sock = std::make_shared<DefaultSocket>
+            (AF_INET , SOCK_STREAM, 0);
+    else
     {
-        auto vstatic = VHostFactory::Create(vc);
+        sha_sock = std::make_shared<DefaultSocket>
+            (AF_INET6 , SOCK_STREAM, 0);
+        sha_sock->ipv6_set(true);
+    }
+    sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
+    sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
 
-        dispatcher.insert_staticfile(vstatic);
-        AddrInfo addrinfo = misc::getaddrinfo(vc.ip.c_str(),
-                std::to_string(vc.port).c_str(), hints);
-        /*
-           for(auto &i : addrinfo)
-           {
-           if(i.ai_family == AF_INET)
-           {
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)i.ai_addr;
-           i.ai_addr->sockaddr = ipv4;
-           }
-           else
-           {
-           struct sockaddr_in *ipv6 = (struct sockaddr_in6 *)i.ai_addr;
-           i.ai_addr = ipv6;
-           }
-           }
-         */
-        std::shared_ptr<DefaultSocket> sha_sock;
-        if((*addrinfo.begin()).ai_family == AF_INET)
-            sha_sock = std::make_shared<DefaultSocket>
-                (AF_INET , SOCK_STREAM, 0);
-        else
+    for(auto &i : addrinfo)
+    {
+        try
         {
-            sha_sock = std::make_shared<DefaultSocket>
-                (AF_INET6 , SOCK_STREAM, 0);
-            sha_sock->ipv6_set(true);
+            sha_sock->bind(i.ai_addr, i.ai_addrlen);
         }
-        sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
-        sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
-
-        for(auto &i : addrinfo)
+        catch(std::system_error&)
         {
-            try
-            {
-                sha_sock->bind(i.ai_addr, i.ai_addrlen);
-            }
-            catch(std::system_error&)
-            {
-                continue;
-            }
+            continue;
         }
-        sha_sock->listen(10);
+    }
+    sha_sock->listen(10);
 
         http::Request::header_max_size = 8000;  // @Salome add this VHostCofig
         http::Request::uri_max_size = 2000;     // values here after finishing
         http::Request::payload_max_size = 2000;  // that part FIXME
 
-        //calling listener
-        /*EventWatcherRegistry event_register();*/
-        event_register.register_ew<ListenerEW>(sha_sock);
-    }
+    //calling listener
+    /*EventWatcherRegistry event_register();*/
+    event_register.register_ew<ListenerEW>(sha_sock);
     event_register.loop_get()();
 
 
