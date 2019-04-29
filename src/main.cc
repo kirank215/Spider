@@ -8,6 +8,7 @@
 #include "misc/socket.hh"
 #include "misc/fd.hh"
 #include "socket/default-socket.hh"
+#include "socket/ssl-socket.hh"
 #include "misc/addrinfo/addrinfo.hh"
 #include "events/listener.hh"
 #include "events/register.hh"
@@ -44,20 +45,13 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
+    SSL_CTX* ctx = InitServerCTX();
 
-    AddrInfoHint hints;
-    hints.family(AF_UNSPEC);
-    hints.socktype(SOCK_STREAM);
+    if(ctx == NULL)      // error during ssl init
+        return -1;
 
-    //server socket creation and binding
-    InitServerCTX(sc);
-
-    if(sc.ctx == NULL)      // error during ssl init
-        return;
-
-    if(setKeyCert(sc.ctx) == -1)    // set key and certificate of host
-        return;                     // add SNI for flexibilty with more vhosts
+    if(setKeyCert(ctx) == -1)    // set key and certificate of host
+        return -1;                     // add SNI for flexibilty with more vhosts
 
     dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
 
@@ -87,14 +81,14 @@ int main(int argc, char *argv[])
        }
        }
      */
-    std::shared_ptr<DefaultSocket> sha_sock;
+    std::shared_ptr<SSLSocket> sha_sock;
     if((*addrinfo.begin()).ai_family == AF_INET)
-        sha_sock = std::make_shared<DefaultSocket>
-            (AF_INET , SOCK_STREAM, 0);
+        sha_sock = std::make_shared<SSLSocket>
+            (AF_INET , SOCK_STREAM, 0, ctx);
     else
     {
-        sha_sock = std::make_shared<DefaultSocket>
-            (AF_INET6 , SOCK_STREAM, 0);
+        sha_sock = std::make_shared<SSLSocket>
+            (AF_INET6 , SOCK_STREAM, 0, ctx);
         sha_sock->ipv6_set(true);
     }
     sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
@@ -123,6 +117,7 @@ int main(int argc, char *argv[])
     event_register.loop_get()();
 
 
+    SSL_CTX_free(ctx);
     return 0;
 
     /*TESTING PARSING
