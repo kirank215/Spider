@@ -78,6 +78,7 @@ SOURCES = \
           src/socket/default-socket.hh \
           src/socket/socket.cc \
           src/socket/ssl-socket.hh \
+          src/socket/ssl-socket.cc \
           src/vhost/vhost-reverse-proxy.hh \
           src/vhost/connection.hh \
           src/vhost/connection.cc \

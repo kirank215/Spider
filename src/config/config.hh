@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include <openssl/ssl.h>
-#include <openssl/error.h>
+#include <openssl/err.h>
 
 namespace http
 {
@@ -54,7 +54,7 @@ namespace http
         bool default_vhost; //nn, needs to be unique
     };
 
-    int set_KeyCert();     // possibly for every host
+    int setKeyCert(SSL_CTX* );     // possibly for every host
 
     /**
      * \struct ServerConfig
@@ -71,7 +71,7 @@ namespace http
         ServerConfig(ServerConfig&&) = default;
         ServerConfig& operator=(ServerConfig&&) = default;
 
-        ~ServerConfig();
+        ~ServerConfig() = default;
         size_t header_max_size;
         size_t uri_max_size;
         size_t payload_max_size;
@@ -97,16 +97,6 @@ namespace http
      * \param sc The server for which ssl-server has to be initialised
      *
      */
-    void InitServerCTX(ServerConfig sc)
-    {
-        // setup
-        OpenSSl_add_all_algorithms();
-        SSL_load_error_strings();
-
-        const SSL_METHOD* method = SSLv23_server_method;
-        sc.ctx = SSL_CTX_new(method);
-        if(sc.ctx == NULL)
-             ERR_print_errors_fp(stderr);
-    }
+    SSL_CTX* InitServerCTX();
 
 } // namespace http

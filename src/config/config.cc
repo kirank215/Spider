@@ -60,11 +60,6 @@ namespace http
         return 1;
     }
 
-    ~ServerConfig()
-    {
-        if(this.sc != NULL)
-            SSL_CTX_free(ctx);
-    }
 
     ServerConfig parse_configuration(const std::string& path, bool dry)
     {
@@ -215,15 +210,13 @@ namespace http
         return SC;
     }
 
-    void InitServerCTX(ServerConfig sc)
+    SSL_CTX* InitServerCTX()
     {
         // setup
-        OpenSSl_add_all_algorithms();
+        OpenSSL_add_all_algorithms();
         SSL_load_error_strings();
 
-        const SSL_METHOD* method = SSLv23_server_method;
-        sc.ctx = SSL_CTX_new(method);
-        if(sc.ctx == NULL)
-             ERR_print_errors_fp(stderr);
+        return SSL_CTX_new(SSLv23_server_method());
     }
+
 }
