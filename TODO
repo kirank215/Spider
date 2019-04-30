@@ -34,10 +34,13 @@ GRACEFUL EXIT       [V]
 --------------------------
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 -------- STEP 2 ----------
 >>>>>>> Completed HTTPS, edit TODO
 =======
 
+=======
+>>>>>>> TODO
 -------- STEP 2 ----------
 >>>>>>> Updated TODO, not commited respective code as connot test
 NEW CONFIG FILE      []
