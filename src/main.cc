@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
     sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
     sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
 
+    sha_sock->ssl_set_fd(*(sha_sock)->fd_get());
+
     for(auto &i : addrinfo)
     {
         try

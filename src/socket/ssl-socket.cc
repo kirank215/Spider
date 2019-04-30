@@ -10,14 +10,19 @@ namespace http
         : Socket(std::make_shared<misc::FileDescriptor>(
                     sys::socket(domain, type, protocol))),
                     ssl_(SSL_new(ssl_ctx), SSL_free)
-    {
-        SSL_set_fd(ssl_.get(), *(this->fd_));
-    }
+    {}
 
     SSLSocket::SSLSocket(const misc::shared_fd& fd, SSL_CTX* ssl_ctx)
         : Socket(fd), ssl_(SSL_new(ssl_ctx), SSL_free)
     {
         SSL_set_fd(ssl_.get(), *(this->fd_));
+        int accept = SSL_accept(ssl_.get());
+        if(accept < 0)
+        {
+            ERR_print_errors_fp(stderr);
+            int ret = SSL_get_error(ssl_.get(), accept);
+            std::cout << ret;
+        }
     }
 
     ssize_t SSLSocket::recv(void* dst, size_t len)
@@ -52,15 +57,11 @@ namespace http
     std::shared_ptr<Socket> SSLSocket::accept(sockaddr* addr,
             socklen_t* addrlen)
     {
-        SSL_CTX* ctx = SSL_CTX_new(SSLv23_client_method());
-        auto res = sys::accept(*fd_, addr, addrlen);
-        auto res1 = std::make_shared<misc::FileDescriptor>(std::move(res));
-        auto result = std::make_shared<SSLSocket>(res1, ctx);
-        if(SSL_accept(ssl_.get()) <= 0)
-        {
-            ERR_print_errors_fp(stderr);
-            return NULL;
-        }
+        //SSL_CTX* ctx = SSL_CTX_new(SSLv23_client_method());
+        auto resfd = sys::accept(*fd_, addr, addrlen);
+        auto sharedfd = std::make_shared<misc::FileDescriptor>(std::move(resfd));
+        auto result = std::make_shared<SSLSocket>(sharedfd,
+                                        SSL_get_SSL_CTX(ssl_.get()));
         return result;
     }
 
@@ -69,6 +70,12 @@ namespace http
         // possibly check validity of cerificates before or at some point
         sys::connect(*fd_, addr, addrlen);
     }
+
+    int SSLSocket::ssl_set_fd(int fd)
+    {
+        return SSL_set_fd(ssl_.get(), fd);
+    }
+
 
 }
 
