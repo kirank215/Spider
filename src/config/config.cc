@@ -38,15 +38,15 @@ namespace http
 
     int setKeyCert(SSL_CTX* ctx)
     {
-        SSL_CTX_set_ecdh_auto(ctx, 1);      // ??
+//        SSL_CTX_set_ecdh_auto(ctx, 1);      // ??
 
         //XXX check on how cert and key are generated
-        if (SSL_CTX_use_certificate_file(ctx, "cert.pem", SSL_FILETYPE_PEM) <= 0) {
+        if (SSL_CTX_use_certificate_file(ctx, "localhost.pem", SSL_FILETYPE_PEM) <= 0) {
             ERR_print_errors_fp(stderr);
             return -1;
         }
 
-        if (SSL_CTX_use_PrivateKey_file(ctx, "key.pem", SSL_FILETYPE_PEM) <= 0 ) {
+        if (SSL_CTX_use_PrivateKey_file(ctx, "localhost-key.pem", SSL_FILETYPE_PEM) <= 0 ) {
             ERR_print_errors_fp(stderr);
             return -1;
         }
