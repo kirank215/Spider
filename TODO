@@ -32,3 +32,14 @@ STATIC FILE SERVER  [T]
 STATUS CODE         [V]
 GRACEFUL EXIT       [V]
 --------------------------
+
+-------- STEP 2 ----------
+NEW CONFIG FILE      []
+MORE EXIT CODES      []
+REUSING CONNECTIONS  [V]
+DISPATCHER           []
+PROXY                []
+HTTPS                [V]
+APM                  []
+TEST SUITE           []
+--------------------------
