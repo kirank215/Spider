@@ -144,7 +144,6 @@ int main(int argc, char *argv[])
         http::Request::uri_max_size = 2000;     // values here after finishing
         http::Request::payload_max_size = 2000;  // that part FIXME
 
-        //calling listener
         event_register.register_ew<ListenerEW>(sha_sock);
     }
     event_register.loop_get()();
