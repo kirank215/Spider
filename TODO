@@ -33,14 +33,19 @@ STATUS CODE         [V]
 GRACEFUL EXIT       [V]
 --------------------------
 
+<<<<<<< HEAD
 -------- STEP 2 ----------
 >>>>>>> Completed HTTPS, edit TODO
+=======
+
+-------- STEP 2 ----------
+>>>>>>> Updated TODO, not commited respective code as connot test
 NEW CONFIG FILE      []
 MORE EXIT CODES      []
 REUSING CONNECTIONS  [V]
-DISPATCHER           []
+DISPATCHER           [V]
 PROXY                []
 HTTPS                [V]
-APM                  []
+APM                  [V]
 TEST SUITE           []
 --------------------------
