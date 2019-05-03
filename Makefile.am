@@ -44,6 +44,8 @@ SOURCES = \
           src/events/event-loop.cc \
           src/events/events.cc \
           src/events/events.hh \
+          src/request/request.hh \
+          src/request/request.cc \
           src/events/listener.hh \
           src/events/listener.cc \
           src/events/register.hh \
@@ -68,8 +70,6 @@ SOURCES = \
           src/misc/unistd.hh \
           src/request/error.hh \
           src/request/error.cc \
-          src/request/request.hh \
-          src/request/request.cc \
           src/request/response.hh \
           src/request/response.cc \
           src/request/types.hh \
