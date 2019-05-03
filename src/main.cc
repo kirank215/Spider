@@ -23,9 +23,48 @@ using namespace misc;
 EventWatcherRegistry http::event_register;
 Dispatcher http::dispatcher;
 
-size_t http::Request::header_max_size = 0;
-size_t http::Request::uri_max_size = 0;
-int http::Request::payload_max_size = 0;
+
+std::shared_ptr<Socket> create_SSLSocket(
+            const AddrInfo& addrinfo, const VHostConfig& vc)
+{
+    std::shared_ptr<SSLSocket> sha_sock;
+    if((*addrinfo.begin()).ai_family == AF_INET)
+        sha_sock = std::make_shared<SSLSocket>
+            (AF_INET , SOCK_STREAM, 0, vc.ctx);
+    else
+    {
+        sha_sock = std::make_shared<SSLSocket>
+            (AF_INET6 , SOCK_STREAM, 0, vc.ctx);
+        sha_sock->ipv6_set(true);
+    }
+    sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
+    sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
+
+    sha_sock->ssl_set_fd(*(sha_sock)->fd_get());
+
+    return sha_sock;
+}
+
+
+std::shared_ptr<Socket> create_DefaultSocket(
+            const AddrInfo& addrinfo)
+{
+    std::shared_ptr<DefaultSocket> sha_sock;
+    if((*addrinfo.begin()).ai_family == AF_INET)
+        sha_sock = std::make_shared<DefaultSocket>
+            (AF_INET , SOCK_STREAM, 0);
+    else
+    {
+        sha_sock = std::make_shared<DefaultSocket>
+            (AF_INET6 , SOCK_STREAM, 0);
+        sha_sock->ipv6_set(true);
+    }
+    sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
+    sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
+
+    return sha_sock;
+}
+>>>>>>> removed comments from main, commit before merge
 
 int main(int argc, char *argv[])
 {
@@ -60,7 +99,49 @@ int main(int argc, char *argv[])
     hints.socktype(SOCK_STREAM);
 
     //server socket creation and binding
+<<<<<<< HEAD
     for(VHostConfig vc : sc.list_vhost)
+=======
+    VHostConfig vc = sc.list_vhost[0];
+    auto vstatic = VHostFactory::Create(vc);
+
+    if(setKeyCert(vc) == -1)    // set key and certificate of host
+        return -1;                     // add SNI for flexibilty with more vhosts
+
+    dispatcher.insert_staticfile(vstatic);
+    AddrInfo addrinfo = misc::getaddrinfo(vc.ip.c_str(),
+            std::to_string(vc.port).c_str(), hints);
+
+     removed dead code here
+
+    XXX check if the socket is default or ssl!
+    std::shared_ptr<Socket> sha_sock;
+     ugly code comin up, replace by functions
+
+    if(vc.ctx == NULL)
+        sha_sock = create_DefaultSocket(addrinfo);
+    else
+        sha_sock = create_SSLSocket(addrinfo, vc);
+         set server name
+         set sni callback
+         move accept from constructor to here
+
+    std::shared_ptr<SSLSocket> sha_sock;
+    if((*addrinfo.begin()).ai_family == AF_INET)
+        sha_sock = std::make_shared<SSLSocket>
+            (AF_INET , SOCK_STREAM, 0, vc.ctx);
+    else
+    {
+        sha_sock = std::make_shared<SSLSocket>
+            (AF_INET6 , SOCK_STREAM, 0, vc.ctx);
+        sha_sock->ipv6_set(true);
+    }
+    sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
+    sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
+
+    sha_sock->ssl_set_fd(*(sha_sock)->fd_get());
+    for(auto &i : addrinfo)
+>>>>>>> removed comments from main, commit before merge
     {
         auto vstatic = VHostFactory::Create(vc);
 
@@ -123,15 +204,5 @@ int main(int argc, char *argv[])
 
     SSL_CTX_free(ctx);
     return 0;
-
-    /*TESTING PARSING
-      for(auto it = sc.list_vhost.begin(); it != sc.list_vhost.end(); it++)
-      {
-      VHostConfig foo = *it;
-      std::cout << "IP : " << foo.ip << "\n";
-      std::cout << "port : " << (unsigned)foo.port<< "\n";
-      std::cout << "server_name : " << foo.server_name<< "\n";
-      std::cout << "root : " << foo.root<< "\n";
-      std::cout << "default_file : " << foo.default_file<< "\n\n";
-      }*/
 }
+
