@@ -18,6 +18,11 @@ namespace http
      * \class Dispatcher
      * \brief Instance in charge of dispatching requests between vhosts.
      */
+
+
+//    int APM_add(std::map<std::string, int>, std::string);
+//    int APM_sub(std::map<std::string, int>, std::string);
+
     class Dispatcher
     {
         public:
@@ -31,6 +36,7 @@ namespace http
             void set_hosts(ServerConfig&);
             void insert_staticfile(shared_vhost vs);
             void respond(const Request&, const Connection& c);
+
 
 
 

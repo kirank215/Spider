@@ -9,6 +9,7 @@
 #include "request/request.hh"
 #include "vhost/connection.hh"
 #include "vhost/vhost.hh"
+#include "vhost/dispatcher.hh"
 
 namespace http
 {

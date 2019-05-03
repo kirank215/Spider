@@ -3,6 +3,7 @@
 #include "request/request.hh"
 #include "request/response.hh"
 #include "socket/socket.hh"
+#include "config/config.hh"
 
 namespace http
 {
@@ -29,4 +30,5 @@ class EventRequest : public EventWatcher
             shared_socket sock_;
             Response res_;
     };
+    void update_APM(VHostConfig& vc, STATUS_CODE& st);
 }

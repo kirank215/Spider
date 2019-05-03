@@ -19,6 +19,8 @@ namespace http
      * \struct Request
      * \brief Value object representing a request.
      */
+
+
     enum method
     {
         GET,

@@ -28,7 +28,7 @@ namespace http
                                 (dport == port || port == ""))
                         {
                             Connection c(conf, er.get_sock(), conf.port);
-//                            connections_.insert(c);
+                            //                            connections_.insert(c);
                             return c;
                         }
                     }
