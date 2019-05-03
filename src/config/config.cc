@@ -67,11 +67,8 @@ namespace http
 
                                     if((elt[i]["proxy_pass"]["proxy_set_header"]))
                                     {
-                                        for(auto it = elt[i]["proxy_pass"]["proxy_set_header"].begin();
-                                        it != elt[i]["proxy_pass"]["proxy_set_header"].end(); it++)
-                                        {
-                                            proxy_pass.proxy_set_header.insert(it->first, it->second);
-                                        }
+                                        proxy_pass.proxy_set_header =
+                                            elt[i]["proxy_pass"]["proxy_set_header"].get<std::map<std::string, std::string>>();
                                     }
                                     if((elt[i]["proxy_pass"]["proxy_remove_header"]))
                                     {
@@ -82,11 +79,8 @@ namespace http
                                     }
                                     if((elt[i]["proxy_pass"]["set_header"]))
                                     {
-                                        for(auto it = elt[i]["proxy_pass"]["set_header"].begin();
-                                        it != elt[i]["proxy_pass"]["set_header"].end(); it++)
-                                        {
-                                            proxy_pass.set_header.insert(it->first, it->second);
-                                        }
+                                        proxy_pass.set_header =
+                                            elt[i]["proxy_pass"]["set_header"].get<std::map<std::string, std::string>>();
                                     }
                                     if((elt[i]["proxy_pass"]["remove_header"]))
                                     {
@@ -107,13 +101,13 @@ namespace http
                                 v.default_file = "index.html";
                         }
                         if(elt[i]["ssl_cert"] && elt[i]["ssl_cert"].is_string()
-                            && elt[i]["ssl_key"] && elt[i]["ssl_key"].is_string())
+                                && elt[i]["ssl_key"] && elt[i]["ssl_key"].is_string())
                         {
                             v.ssl_cert = elt[i]["ssl_cert"];
                             v.ssl_key = elt[i]["ssl_key"];
                         }
                         if(elt[i]["auth_basic_user"]
-                            && elt[i]["auth_basic"] && elt[i]["auth_basic"].is_string())
+                                && elt[i]["auth_basic"] && elt[i]["auth_basic"].is_string())
                         {
                             v.auth_basic = elt[i]["auth_basic"];
                             //list of user for loop to add every strings...
