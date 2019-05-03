@@ -9,9 +9,9 @@
 #ifdef __clang__
 #pragma GCC diagnostic ignored "-Wlogical-op-parentheses"
 #endif
-#include <json.hpp>
 #include <fstream>
 #include <iostream>
+#include <json.hpp>
 #pragma GCC diagnostic pop
 
 using json = nlohmann::json;
@@ -35,7 +35,6 @@ namespace http
     {
         return this->server_name == rhs.server_name;
     }
-
     ServerConfig parse_configuration(const std::string& path, bool dry)
     {
         json j;
@@ -46,7 +45,25 @@ namespace http
         if(!dry)
         {
             std::vector<VHostConfig> list_vhost;
-            for(unsigned i = 0; i < elt.size(); i++)
+            if (elt["vhosts"] == nullptr)
+                throw("No vhosts found in config file");
+
+            // Filling server config struct
+            if (elt["payload_max_size"] != nullptr)
+            {
+                SC.payload_max_size = elt["payload_max_size"];
+            }
+            if (elt["uri_max_size"] != nullptr)
+            {
+                SC.uri_max_size = elt["uri_max_size"];
+            }
+            if (elt["header_max_size"] != nullptr)
+            {
+                SC.header_max_size = elt["header_max_size"];
+            }
+            int size = elt["vhosts"].size();
+            size = size;
+            for (unsigned i = 0; i < elt["vhosts"].size(); i++)
             {
                 struct VHostConfig v;
                 if(elt["vhosts"][i]["ip"].is_string() &&
@@ -56,11 +73,22 @@ namespace http
                     v.ip = elt["vhosts"][i]["ip"];
                     v.server_name = elt["vhosts"][i]["server_name"];
                     v.port = elt["vhosts"][i]["port"];
+
                     if(elt["vhosts"][i]["proxy_pass"] != nullptr)
                     {
+                        if (elt["vhosts"][i]["root"] != nullptr
+                            || elt["vhosts"][i]["default_file"] != nullptr
+                            || elt["vhosts"][i]["auto_index"] != nullptr)
+                            throw("Invalid config file");
+
                         if ((elt["vhosts"][i]["proxy_pass"]["ip"].is_string()) &&
                                 (elt["vhosts"][i]["proxy_pass"]["port"].is_number()))
                         {
+                            if (elt["vhosts"][i]["proxy_pass"]["ip"] == nullptr
+                                || elt["vhosts"][i]["proxy_pass"]["port"]
+                                    == nullptr)
+                                throw("Invalid config file");
+
                             struct Proxy_pass proxy_pass;
                             proxy_pass.ip = elt["vhosts"][i]["proxy_pass"]["ip"];
                             proxy_pass.port = elt["vhosts"][i]["proxy_pass"]["port"];
@@ -94,20 +122,39 @@ namespace http
                     }
                     else
                     {
+                        if (elt["vhosts"][i]["root"] == nullptr)
+                            throw("Invalid config file, no root found");
                         v.root = elt["vhosts"][i]["root"];
                         if(elt["vhosts"][i]["default_file"].is_string())
                             v.default_file = elt["vhosts"][i]["default_file"];
                         else
                             v.default_file = "index.html";
                     }
+
+                    // Proxy pass / root set after this point.
+                    if ((elt["vhosts"][i]["ssl_cert"] != nullptr
+                         && elt["vhosts"][i]["ssl_key"] == nullptr)
+                        || (elt["vhosts"][i]["ssl_cert"] == nullptr
+                            && elt["vhosts"][i]["ssl_key"] != nullptr))
+                        throw("Invalid config file");
+
+                    if ((elt["vhosts"][i]["auth_basic"] != nullptr
+                         && elt["vhosts"][i]["auth_basic_users"] == nullptr)
+                        || (elt["vhosts"][i]["auth_basic"] == nullptr
+                            && elt["vhosts"][i]["auth_basic_users"] != nullptr))
+                        throw new std::invalid_argument(
+                            "Invalid config file, need both auth_basic \
+                        and auth_basic_user or none.");
+
                     if(elt["vhosts"][i]["ssl_cert"] != nullptr && elt["vhosts"][i]["ssl_cert"].is_string()
                             && elt["vhosts"][i]["ssl_key"]  != nullptr && elt["vhosts"][i]["ssl_key"].is_string())
                     {
                         v.ssl_cert = elt["vhosts"][i]["ssl_cert"];
                         v.ssl_key = elt["vhosts"][i]["ssl_key"];
                     }
-                    if(elt["vhosts"][i]["auth_basic_user"] != nullptr
-                            && elt["vhosts"][i]["auth_basic"] != nullptr && elt["vhosts"][i]["auth_basic"].is_string())
+                    if (elt["vhosts"][i]["auth_basic_users"] != nullptr
+                        && elt["vhosts"][i]["auth_basic"] != nullptr
+                        && elt["vhosts"][i]["auth_basic"].is_string())
                     {
                         v.auth_basic = elt["vhosts"][i]["auth_basic"];
                         //list of user for loop to add every strings...
@@ -120,9 +167,15 @@ namespace http
                         {
                             SC.default_vhost_found = true;
                             //need to set this vhost as the default one
+                        } else
+                        {
+                            throw("Invalid config file");
                         }
                     }
                     list_vhost.push_back(v);
+                } else
+                {
+                    throw("Invalid config file");
                 }
             }
             SC.list_vhost = list_vhost;
