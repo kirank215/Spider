@@ -49,3 +49,12 @@ HTTPS                [V]
 APM                  [V]
 TEST SUITE           []
 --------------------------
+
+
+BUG LIST
+
+fix 0.0.0.0 in config
+
+fix https requests in http
+
+fix cert for different vhosts (sni)
