@@ -25,7 +25,7 @@ Dispatcher http::dispatcher;
 
 
 std::shared_ptr<Socket> create_SSLSocket(
-            const AddrInfo& addrinfo, const VHostConfig& vc)
+        const AddrInfo& addrinfo, const VHostConfig& vc)
 {
     std::shared_ptr<SSLSocket> sha_sock;
     if((*addrinfo.begin()).ai_family == AF_INET)
@@ -47,7 +47,7 @@ std::shared_ptr<Socket> create_SSLSocket(
 
 
 std::shared_ptr<Socket> create_DefaultSocket(
-            const AddrInfo& addrinfo)
+        const AddrInfo& addrinfo)
 {
     std::shared_ptr<DefaultSocket> sha_sock;
     if((*addrinfo.begin()).ai_family == AF_INET)
@@ -64,7 +64,6 @@ std::shared_ptr<Socket> create_DefaultSocket(
 
     return sha_sock;
 }
->>>>>>> removed comments from main, commit before merge
 
 int main(int argc, char *argv[])
 {
@@ -99,84 +98,29 @@ int main(int argc, char *argv[])
     hints.socktype(SOCK_STREAM);
 
     //server socket creation and binding
-<<<<<<< HEAD
-    for(VHostConfig vc : sc.list_vhost)
-=======
-    VHostConfig vc = sc.list_vhost[0];
-    auto vstatic = VHostFactory::Create(vc);
-
-    if(setKeyCert(vc) == -1)    // set key and certificate of host
-        return -1;                     // add SNI for flexibilty with more vhosts
-
-    dispatcher.insert_staticfile(vstatic);
-    AddrInfo addrinfo = misc::getaddrinfo(vc.ip.c_str(),
-            std::to_string(vc.port).c_str(), hints);
-
-     removed dead code here
-
-    XXX check if the socket is default or ssl!
-    std::shared_ptr<Socket> sha_sock;
-     ugly code comin up, replace by functions
-
-    if(vc.ctx == NULL)
-        sha_sock = create_DefaultSocket(addrinfo);
-    else
-        sha_sock = create_SSLSocket(addrinfo, vc);
-         set server name
-         set sni callback
-         move accept from constructor to here
-
-    std::shared_ptr<SSLSocket> sha_sock;
-    if((*addrinfo.begin()).ai_family == AF_INET)
-        sha_sock = std::make_shared<SSLSocket>
-            (AF_INET , SOCK_STREAM, 0, vc.ctx);
-    else
-    {
-        sha_sock = std::make_shared<SSLSocket>
-            (AF_INET6 , SOCK_STREAM, 0, vc.ctx);
-        sha_sock->ipv6_set(true);
-    }
-    sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
-    sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
-
-    sha_sock->ssl_set_fd(*(sha_sock)->fd_get());
-    for(auto &i : addrinfo)
->>>>>>> removed comments from main, commit before merge
+    for (auto vc : sc.list_vhost)
     {
         auto vstatic = VHostFactory::Create(vc);
+
+        if(setKeyCert(vc) == -1)    // set key and certificate of host
+            return -1;                     // add SNI for flexibilty with more vhosts
 
         dispatcher.insert_staticfile(vstatic);
         AddrInfo addrinfo = misc::getaddrinfo(vc.ip.c_str(),
                 std::to_string(vc.port).c_str(), hints);
-        /*
-           for(auto &i : addrinfo)
-           {
-           if(i.ai_family == AF_INET)
-           {
-           struct sockaddr_in *ipv4 = (struct sockaddr_in *)i.ai_addr;
-           i.ai_addr->sockaddr = ipv4;
-           }
-           else
-           {
-           struct sockaddr_in *ipv6 = (struct sockaddr_in6 *)i.ai_addr;
-           i.ai_addr = ipv6;
-           }
-           }
-         */
-        std::shared_ptr<SSLSocket> sha_sock;
-        if((*addrinfo.begin()).ai_family == AF_INET)
-            sha_sock = std::make_shared<SSLSocket>
-                (AF_INET , SOCK_STREAM, 0, ctx);
-        else
-        {
-            sha_sock = std::make_shared<SSLSocket>
-                (AF_INET6 , SOCK_STREAM, 0, ctx);
-            sha_sock->ipv6_set(true);
-        }
-        sha_sock->setsockopt(SOL_SOCKET, (SO_REUSEPORT | SO_REUSEADDR), 1);
-        sys::fcntl_set((*(sha_sock)->fd_get()), O_NONBLOCK);
 
-        sha_sock->ssl_set_fd(*(sha_sock)->fd_get());
+        //     removed dead code here
+
+        //  XXX check if the socket is default or ssl!
+
+        std::shared_ptr<Socket> sha_sock;
+        if(vc.ctx == NULL)
+            sha_sock = create_DefaultSocket(addrinfo);
+        else
+            sha_sock = create_SSLSocket(addrinfo, vc);
+        //           set server name
+        //         set sni callback
+        //       move accept from constructor to here
 
         for(auto &i : addrinfo)
         {
@@ -196,7 +140,6 @@ int main(int argc, char *argv[])
         http::Request::payload_max_size = 2000;  // that part FIXME
 
         //calling listener
-        /*EventWatcherRegistry event_register();*/
         event_register.register_ew<ListenerEW>(sha_sock);
     }
     event_register.loop_get()();
