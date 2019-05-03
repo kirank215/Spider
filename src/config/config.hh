@@ -72,6 +72,7 @@ namespace http
         size_t payload_max_size;
         bool default_vhost_found;
         std::vector<VHostConfig> list_vhost;
+        VHostConfig default_vhost;
     };
 
     /**

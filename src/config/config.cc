@@ -45,6 +45,7 @@ namespace http
         if(!dry)
         {
             std::vector<VHostConfig> list_vhost;
+
             if (elt["vhosts"] == nullptr)
                 throw("No vhosts found in config file");
 
@@ -166,7 +167,7 @@ namespace http
                         if(!SC.default_vhost_found)
                         {
                             SC.default_vhost_found = true;
-                            //need to set this vhost as the default one
+                            SC.default_vhost = v;
                         } else
                         {
                             throw("Invalid config file");
