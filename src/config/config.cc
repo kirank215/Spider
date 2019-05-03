@@ -36,7 +36,22 @@ namespace http
         return this->server_name == rhs.server_name;
     }
 
-    int setKeyCert(SSL_CTX* ctx)
+    VHostConfig::VHostConfig()
+    {
+         APM_local.insert(std::pair<std::string,int>("requests_2xx",  0));
+         APM_local.insert(std::pair<std::string,int>("requests_4xx",  0));
+         APM_local.insert(std::pair<std::string,int>("requests_5xx",  0));
+         APM_local.insert(std::pair<std::string,int>("requests_nb" , 0));
+
+    }
+
+    VHostConfig::~VHostConfig()
+    {
+      if(ctx != NULL)
+        SSL_CTX_free(ctx);
+    }
+
+    int setKeyCert(VHostConfig& vc)
     {
 //        SSL_CTX_set_ecdh_auto(ctx, 1);      // ??
 
@@ -63,9 +78,8 @@ namespace http
 
     ServerConfig parse_configuration(const std::string& path, bool dry)
     {
-        json j;
-        j = create_json(path);
-        json elt = j;
+        json elt;
+        elt = create_json(path);
         struct ServerConfig SC;
         SC.default_vhost_found = false;
         if(!dry)

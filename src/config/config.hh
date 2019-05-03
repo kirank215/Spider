@@ -31,7 +31,7 @@ namespace http
     };
     struct VHostConfig
     {
-        VHostConfig() = default;
+        VHostConfig();
         VHostConfig(const VHostConfig&) = default;
         VHostConfig& operator=(const VHostConfig&) = default;
         VHostConfig(VHostConfig&&) = default;
