@@ -62,39 +62,41 @@ namespace http
                                 (elt[i]["proxy_pass"]["port"].is_number())
                                 {
                                     struct Proxy_pass proxy_pass;
-                                    proxy_pass.ip = (elt[i]["proxy_pass"]["ip"];
+                                    proxy_pass.ip = elt[i]["proxy_pass"]["ip"];
                                     proxy_pass.port = elt[i]["proxy_pass"]["port"];
 
                                     if(elt[i]["proxy_pass"]["proxy_set_header"])
                                     {
-                                        for()
+                                        proxy_pass.proxy_set_header;
+                                        for(int j = 0; elt[i]["proxy_pass"]["proxy_set_header"][j]; j++)
                                         {
-
+                                            proxy_pass.proxy_set_header.push_back(elt[i]["proxy_pass"]["proxy_set_header"][j]);
                                         }
                                     }
                                     if(elt[i]["proxy_pass"]["proxy_remove_header"])
                                     {
-                                        for()
+                                        proxy_pass.proxy_remove_header;
+                                        for(int j = 0; elt[i]["proxy_pass"]["proxy_remove_header"][j]; j++)
                                         {
-
+                                            proxy_pass.proxy_remove_header.push_back(elt[i]["proxy_pass"]["proxy_remove_header"][j]);
                                         }
-                                        proxy_pass.port = elt[i]["proxy_pass"]["port"];
                                     }
                                     if((elt[i]["proxy_pass"]["set_header"])
                                     {
-                                        for()
+                                        proxy_pass.set_header;
+                                        for(int j = 0; elt[i]["proxy_pass"]["set_header"][j]; j++)
                                         {
-
+                                            proxy_pass.set_header.insert({elt[i]["proxy_pass"]["set_header"][j].first,
+                                            elt[i]["proxy_pass"]["set_header"][j].second});
                                         }
-                                        proxy_pass.port = elt[i]["proxy_pass"]["port"]
                                     }
                                     if(elt[i]["proxy_pass"]["remove_header"])
                                     {
-                                        for()
+                                        proxy_pass.remove_header;
+                                        for(int j = 0; elt[i]["proxy_pass"]["remove_header"][j]; j++)
                                         {
-
+                                            proxy_pass.remove_header.push_back(elt[i]["proxy_pass"]["remove_header"][j]);
                                         }
-                                        proxy_pass.port = elt[i]["proxy_pass"]["port"];
                                     }
                                     v.proxy_pass = proxy_pass;
                                 }
