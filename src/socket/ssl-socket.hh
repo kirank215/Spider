@@ -12,6 +12,8 @@
 
 #include "misc/socket.hh"
 #include "socket/socket.hh"
+#include "config/config.hh"
+#include "misc/addrinfo/addrinfo.hh"
 
 namespace http
 {
@@ -62,3 +64,5 @@ namespace http
         std::unique_ptr<SSL, decltype(SSL_free)*> ssl_;
     };
 } // namespace http
+    std::shared_ptr<http::Socket>  create_SSLSocket(
+                const misc::AddrInfo&, const http::VHostConfig&);

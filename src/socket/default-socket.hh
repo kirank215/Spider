@@ -7,6 +7,8 @@
 
 #include "misc/socket.hh"
 #include "socket/socket.hh"
+#include "config/config.hh"
+#include "misc/addrinfo/addrinfo.hh"
 
 namespace http
 {
@@ -37,3 +39,5 @@ namespace http
         void connect(const sockaddr*, socklen_t) final;
     };
 } // namespace http
+    std::shared_ptr<http::Socket> create_DefaultSocket(
+                const misc::AddrInfo&);
