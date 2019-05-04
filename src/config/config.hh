@@ -38,7 +38,7 @@ namespace http
         VHostConfig& operator=(VHostConfig&&) = default;
         bool operator==(const VHostConfig&) const;
 
-        ~VHostConfig() = default;
+        ~VHostConfig();
         std::string ip;
         std::string server_name;
         uint16_t port;
@@ -52,9 +52,14 @@ namespace http
         std::string health_endpoint; //nn
         bool auto_index; //nn, not allowed if proxy
         bool default_vhost; //nn, needs to be unique
+        SSL_CTX* ctx = NULL;
+        std::map<std::string, int> APM_local;       // use functions defined in dispatcher, http namespace to edit vals
+
+
     };
 
-    int setKeyCert(SSL_CTX* );     // possibly for every host
+    int setKeyCert(VHostConfig&);     // possibly for every host
+
 
     /**
      * \struct ServerConfig
@@ -77,8 +82,6 @@ namespace http
         size_t payload_max_size;
         bool default_vhost_found;
         std::vector<VHostConfig> list_vhost;
-        VHostConfig default_vhost;
-        SSL_CTX *ctx = NULL;
     };
 
     /**
@@ -97,6 +100,6 @@ namespace http
      * \param sc The server for which ssl-server has to be initialised
      *
      */
-    SSL_CTX* InitServerCTX();
+    void InitServerCTX();
 
 } // namespace http

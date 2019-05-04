@@ -1,11 +1,8 @@
 
 #include "socket/ssl-socket.hh"
 #include "misc/openssl/ssl.hh"
-<<<<<<< HEAD
-=======
 #include "config/config.hh"
 #include "vhost/dispatcher.hh"
->>>>>>> SSL: server name iden
 
 
 

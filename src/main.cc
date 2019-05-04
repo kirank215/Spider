@@ -89,13 +89,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    SSL_CTX* ctx = InitServerCTX();
+    InitServerCTX();
 
-    if(ctx == NULL)      // error during ssl init
-        return -1;
-
-    if(setKeyCert(ctx) == -1)    // set key and certificate of host
-        return -1;                     // add SNI for flexibilty with more vhosts
 
     dispatcher.set_hosts(sc);   // add list of hosts in dispatcher
 
@@ -149,7 +144,6 @@ int main(int argc, char *argv[])
     event_register.loop_get()();
 
 
-    SSL_CTX_free(ctx);
     return 0;
 }
 

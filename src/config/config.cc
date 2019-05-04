@@ -38,10 +38,11 @@ namespace http
 
     VHostConfig::VHostConfig()
     {
-        APM_local.insert(std::pair<std::string,int>("requests_2xx",  0));
-        APM_local.insert(std::pair<std::string,int>("requests_4xx",  0));
-        APM_local.insert(std::pair<std::string,int>("requests_5xx",  0));
-        APM_local.insert(std::pair<std::string,int>("requests_nb" , 0));
+         APM_local.insert(std::pair<std::string,int>("requests_2xx",  0));
+         APM_local.insert(std::pair<std::string,int>("requests_4xx",  0));
+         APM_local.insert(std::pair<std::string,int>("requests_5xx",  0));
+         APM_local.insert(std::pair<std::string,int>("requests_nb" , 0));
+
     }
 
     VHostConfig::~VHostConfig()
@@ -52,21 +53,24 @@ namespace http
 
     int setKeyCert(VHostConfig& vc)
     {
-//        SSL_CTX_set_ecdh_auto(ctx, 1);      // ??
 
+        if(vc.ssl_cert == "")
+            return 1;
+
+        vc.ctx = SSL_CTX_new(SSLv23_server_method());
         //XXX check on how cert and key are generated
-        if (SSL_CTX_use_certificate_file(ctx, "localhost.pem", SSL_FILETYPE_PEM) <= 0) {
+        if (SSL_CTX_use_certificate_file(vc.ctx, vc.ssl_cert.c_str(), SSL_FILETYPE_PEM) <= 0) {
             ERR_print_errors_fp(stderr);
             return -1;
         }
 
-        if (SSL_CTX_use_PrivateKey_file(ctx, "localhost-key.pem", SSL_FILETYPE_PEM) <= 0 ) {
+        if (SSL_CTX_use_PrivateKey_file(vc.ctx, vc.ssl_key.c_str(), SSL_FILETYPE_PEM) <= 0 ) {
             ERR_print_errors_fp(stderr);
             return -1;
         }
 
         // check validity of key
-        if ( !SSL_CTX_check_private_key(ctx) )
+        if ( !SSL_CTX_check_private_key(vc.ctx) )
         {
             std::cerr << "Private key does not match the public certificate\n";
             return -1;
@@ -84,26 +88,8 @@ namespace http
         if(!dry)
         {
             std::vector<VHostConfig> list_vhost;
-
-            if (elt["vhosts"] == nullptr)
-                throw("No vhosts found in config file");
-
-            // Filling server config struct
-            if (elt["payload_max_size"] != nullptr)
-            {
-                SC.payload_max_size = elt["payload_max_size"];
-            }
-            if (elt["uri_max_size"] != nullptr)
-            {
-                SC.uri_max_size = elt["uri_max_size"];
-            }
-            if (elt["header_max_size"] != nullptr)
-            {
-                SC.header_max_size = elt["header_max_size"];
-            }
-            int size = elt["vhosts"].size();
-            size = size;
-            for (unsigned i = 0; i < elt["vhosts"].size(); i++)
+            size_t size = elt["vhosts"].size();
+            for(unsigned i = 0; i < size; i++)
             {
                 struct VHostConfig v;
                 if(elt["vhosts"][i]["ip"].is_string() &&
@@ -113,22 +99,11 @@ namespace http
                     v.ip = elt["vhosts"][i]["ip"];
                     v.server_name = elt["vhosts"][i]["server_name"];
                     v.port = elt["vhosts"][i]["port"];
-
                     if(elt["vhosts"][i]["proxy_pass"] != nullptr)
                     {
-                        if (elt["vhosts"][i]["root"] != nullptr
-                                || elt["vhosts"][i]["default_file"] != nullptr
-                                || elt["vhosts"][i]["auto_index"] != nullptr)
-                            throw("Invalid config file");
-
                         if ((elt["vhosts"][i]["proxy_pass"]["ip"].is_string()) &&
                                 (elt["vhosts"][i]["proxy_pass"]["port"].is_number()))
                         {
-                            if (elt["vhosts"][i]["proxy_pass"]["ip"] == nullptr
-                                    || elt["vhosts"][i]["proxy_pass"]["port"]
-                                    == nullptr)
-                                throw("Invalid config file");
-
                             struct Proxy_pass proxy_pass;
                             proxy_pass.ip = elt["vhosts"][i]["proxy_pass"]["ip"];
                             proxy_pass.port = elt["vhosts"][i]["proxy_pass"]["port"];
@@ -142,44 +117,7 @@ namespace http
                             {
                                 for(auto a : elt["vhosts"][i]["proxy_pass"]["proxy_remove_header"])
                                 {
-                                    struct Proxy_pass proxy_pass;
-                                    proxy_pass.ip = elt[i]["proxy_pass"]["ip"];
-                                    proxy_pass.port = elt[i]["proxy_pass"]["port"];
-
-                                    if(elt[i]["proxy_pass"]["proxy_set_header"])
-                                    {
-                                        proxy_pass.proxy_set_header;
-                                        for(int j = 0; elt[i]["proxy_pass"]["proxy_set_header"][j]; j++)
-                                        {
-                                            proxy_pass.proxy_set_header.push_back(elt[i]["proxy_pass"]["proxy_set_header"][j]);
-                                        }
-                                    }
-                                    if(elt[i]["proxy_pass"]["proxy_remove_header"])
-                                    {
-                                        proxy_pass.proxy_remove_header;
-                                        for(int j = 0; elt[i]["proxy_pass"]["proxy_remove_header"][j]; j++)
-                                        {
-                                            proxy_pass.proxy_remove_header.push_back(elt[i]["proxy_pass"]["proxy_remove_header"][j]);
-                                        }
-                                    }
-                                    if((elt[i]["proxy_pass"]["set_header"])
-                                    {
-                                        proxy_pass.set_header;
-                                        for(int j = 0; elt[i]["proxy_pass"]["set_header"][j]; j++)
-                                        {
-                                            proxy_pass.set_header.insert({elt[i]["proxy_pass"]["set_header"][j].first,
-                                            elt[i]["proxy_pass"]["set_header"][j].second});
-                                        }
-                                    }
-                                    if(elt[i]["proxy_pass"]["remove_header"])
-                                    {
-                                        proxy_pass.remove_header;
-                                        for(int j = 0; elt[i]["proxy_pass"]["remove_header"][j]; j++)
-                                        {
-                                            proxy_pass.remove_header.push_back(elt[i]["proxy_pass"]["remove_header"][j]);
-                                        }
-                                    }
-                                    v.proxy_pass = proxy_pass;
+                                    proxy_pass.proxy_remove_header.push_back(a);
                                 }
                             }
                             if((elt["vhosts"][i]["proxy_pass"]["set_header"]) != nullptr)
@@ -199,39 +137,20 @@ namespace http
                     }
                     else
                     {
-                        if (elt["vhosts"][i]["root"] == nullptr)
-                            throw("Invalid config file, no root found");
                         v.root = elt["vhosts"][i]["root"];
                         if(elt["vhosts"][i]["default_file"].is_string())
                             v.default_file = elt["vhosts"][i]["default_file"];
                         else
                             v.default_file = "index.txt";
                     }
-
-                    // Proxy pass / root set after this point.
-                    if ((elt["vhosts"][i]["ssl_cert"] != nullptr
-                                && elt["vhosts"][i]["ssl_key"] == nullptr)
-                            || (elt["vhosts"][i]["ssl_cert"] == nullptr
-                                && elt["vhosts"][i]["ssl_key"] != nullptr))
-                        throw("Invalid config file");
-
-                    if ((elt["vhosts"][i]["auth_basic"] != nullptr
-                                && elt["vhosts"][i]["auth_basic_users"] == nullptr)
-                            || (elt["vhosts"][i]["auth_basic"] == nullptr
-                                && elt["vhosts"][i]["auth_basic_users"] != nullptr))
-                        throw new std::invalid_argument(
-                                "Invalid config file, need both auth_basic \
-                                and auth_basic_user or none.");
-
                     if(elt["vhosts"][i]["ssl_cert"] != nullptr && elt["vhosts"][i]["ssl_cert"].is_string()
                             && elt["vhosts"][i]["ssl_key"]  != nullptr && elt["vhosts"][i]["ssl_key"].is_string())
                     {
                         v.ssl_cert = elt["vhosts"][i]["ssl_cert"];
                         v.ssl_key = elt["vhosts"][i]["ssl_key"];
                     }
-                    if (elt["vhosts"][i]["auth_basic_users"] != nullptr
-                            && elt["vhosts"][i]["auth_basic"] != nullptr
-                            && elt["vhosts"][i]["auth_basic"].is_string())
+                    if(elt["vhosts"][i]["auth_basic_user"] != nullptr
+                            && elt["vhosts"][i]["auth_basic"] != nullptr && elt["vhosts"][i]["auth_basic"].is_string())
                     {
                         v.auth_basic = elt["vhosts"][i]["auth_basic"];
                         //list of user for loop to add every strings...
@@ -243,16 +162,10 @@ namespace http
                         if(!SC.default_vhost_found)
                         {
                             SC.default_vhost_found = true;
-                            SC.default_vhost = v;
-                        } else
-                        {
-                            throw("Invalid config file");
+                            //need to set this vhost as the default one
                         }
                     }
                     list_vhost.push_back(v);
-                } else
-                {
-                    throw("Invalid config file");
                 }
             }
             SC.list_vhost = list_vhost;

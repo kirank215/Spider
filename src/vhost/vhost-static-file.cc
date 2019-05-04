@@ -31,9 +31,6 @@ namespace http
         std::string path = c.vc_.root + file ;
         std::string out;
         std::string line;
-        std::ifstream f(path);
-        if(!f.is_open())
-            st = NOT_FOUND;
         if(req.request_uri_ == c.vc_.health_endpoint)   // get on healthpoint returns the metrics
         {
             apm.APM_.insert(c.vc_.APM_local.begin(), c.vc_.APM_local.end());

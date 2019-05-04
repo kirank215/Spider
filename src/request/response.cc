@@ -79,6 +79,7 @@ static void known_methods(std::string& body)
     body += ".";
 }
 
+/*
 static http::STATUS_CODE incoming_error(const std::string& err)
 {
     if(err.compare("uri") == 0)
@@ -90,6 +91,7 @@ static http::STATUS_CODE incoming_error(const std::string& err)
     else
         return http::SHOULD_NOT_HAPPEN;
 }
+*/
 
 http::Response::Response(const Request& request, const STATUS_CODE& st,
                             std::string body)
