@@ -41,9 +41,9 @@ namespace http
     Request::Request(shared_socket new_socket)
     {
         apm.APM_add(apm.APM_, "global_connections_reading");
-        long unsigned int header_max_size = 8000; //FIXME this is default value,
-        long unsigned int uri_max_size = 2000;    //calculate from actual value
-        int payload_max_size = 20;              //from config file later;
+//        long unsigned int header_max_size = 8000; //FIXME this is default value,
+//        long unsigned int uri_max_size = 2000;    //calculate from actual value
+//        int payload_max_size = 20;              //from config file later;
 
         char buffer[4096]; //Ususally buffer lenght is 8kb
 

@@ -38,11 +38,10 @@ namespace http
 
     VHostConfig::VHostConfig()
     {
-         APM_local.insert(std::pair<std::string,int>("requests_2xx",  0));
-         APM_local.insert(std::pair<std::string,int>("requests_4xx",  0));
-         APM_local.insert(std::pair<std::string,int>("requests_5xx",  0));
-         APM_local.insert(std::pair<std::string,int>("requests_nb" , 0));
-
+        APM_local.insert(std::pair<std::string,int>("requests_2xx",  0));
+        APM_local.insert(std::pair<std::string,int>("requests_4xx",  0));
+        APM_local.insert(std::pair<std::string,int>("requests_5xx",  0));
+        APM_local.insert(std::pair<std::string,int>("requests_nb" , 0));
     }
 
     VHostConfig::~VHostConfig()
@@ -118,15 +117,15 @@ namespace http
                     if(elt["vhosts"][i]["proxy_pass"] != nullptr)
                     {
                         if (elt["vhosts"][i]["root"] != nullptr
-                            || elt["vhosts"][i]["default_file"] != nullptr
-                            || elt["vhosts"][i]["auto_index"] != nullptr)
+                                || elt["vhosts"][i]["default_file"] != nullptr
+                                || elt["vhosts"][i]["auto_index"] != nullptr)
                             throw("Invalid config file");
 
                         if ((elt["vhosts"][i]["proxy_pass"]["ip"].is_string()) &&
                                 (elt["vhosts"][i]["proxy_pass"]["port"].is_number()))
                         {
                             if (elt["vhosts"][i]["proxy_pass"]["ip"] == nullptr
-                                || elt["vhosts"][i]["proxy_pass"]["port"]
+                                    || elt["vhosts"][i]["proxy_pass"]["port"]
                                     == nullptr)
                                 throw("Invalid config file");
 
@@ -206,23 +205,23 @@ namespace http
                         if(elt["vhosts"][i]["default_file"].is_string())
                             v.default_file = elt["vhosts"][i]["default_file"];
                         else
-                            v.default_file = "index.html";
+                            v.default_file = "index.txt";
                     }
 
                     // Proxy pass / root set after this point.
                     if ((elt["vhosts"][i]["ssl_cert"] != nullptr
-                         && elt["vhosts"][i]["ssl_key"] == nullptr)
-                        || (elt["vhosts"][i]["ssl_cert"] == nullptr
-                            && elt["vhosts"][i]["ssl_key"] != nullptr))
+                                && elt["vhosts"][i]["ssl_key"] == nullptr)
+                            || (elt["vhosts"][i]["ssl_cert"] == nullptr
+                                && elt["vhosts"][i]["ssl_key"] != nullptr))
                         throw("Invalid config file");
 
                     if ((elt["vhosts"][i]["auth_basic"] != nullptr
-                         && elt["vhosts"][i]["auth_basic_users"] == nullptr)
-                        || (elt["vhosts"][i]["auth_basic"] == nullptr
-                            && elt["vhosts"][i]["auth_basic_users"] != nullptr))
+                                && elt["vhosts"][i]["auth_basic_users"] == nullptr)
+                            || (elt["vhosts"][i]["auth_basic"] == nullptr
+                                && elt["vhosts"][i]["auth_basic_users"] != nullptr))
                         throw new std::invalid_argument(
-                            "Invalid config file, need both auth_basic \
-                        and auth_basic_user or none.");
+                                "Invalid config file, need both auth_basic \
+                                and auth_basic_user or none.");
 
                     if(elt["vhosts"][i]["ssl_cert"] != nullptr && elt["vhosts"][i]["ssl_cert"].is_string()
                             && elt["vhosts"][i]["ssl_key"]  != nullptr && elt["vhosts"][i]["ssl_key"].is_string())
@@ -231,8 +230,8 @@ namespace http
                         v.ssl_key = elt["vhosts"][i]["ssl_key"];
                     }
                     if (elt["vhosts"][i]["auth_basic_users"] != nullptr
-                        && elt["vhosts"][i]["auth_basic"] != nullptr
-                        && elt["vhosts"][i]["auth_basic"].is_string())
+                            && elt["vhosts"][i]["auth_basic"] != nullptr
+                            && elt["vhosts"][i]["auth_basic"].is_string())
                     {
                         v.auth_basic = elt["vhosts"][i]["auth_basic"];
                         //list of user for loop to add every strings...
@@ -261,13 +260,12 @@ namespace http
         return SC;
     }
 
-    SSL_CTX* InitServerCTX()
+    void InitServerCTX()
     {
         // setup
         OpenSSL_add_all_algorithms();
         SSL_load_error_strings();
 
-        return SSL_CTX_new(SSLv23_server_method());
     }
 
 }

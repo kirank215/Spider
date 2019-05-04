@@ -26,7 +26,9 @@ namespace http
             remaining_iterator, remaining_iterator)
     {
         STATUS_CODE st = SHOULD_NOT_HAPPEN;
-        std::string path = c.vc_.root + req.request_uri_ ;
+        std::string file = req.request_uri_;
+        file += file == "/" ? c.vc_.default_file : "";
+        std::string path = c.vc_.root + file ;
         std::string out;
         std::string line;
         std::ifstream f(path);
@@ -41,14 +43,22 @@ namespace http
             st = OK;
             // POST same as GET for now. Change for later stages
         }
-        else if(req.m_ == GET || req.m_ == POST)
-        {
-            while(std::getline(f, line))
-                out += line;
-        }
         else
         {
-            st = OK;
+            std::ifstream f(path);
+            if(!f.is_open())
+                st = NOT_FOUND;
+            else if(req.m_ == GET || req.m_ == POST)
+            {
+                while(std::getline(f, line))
+                    out += line + "\n";
+                st = OK;
+                // POST same as GET for now. Change for later stages
+            }
+            else if(req.m_ == HEAD)
+            {
+                st = OK;
+            }
         }
         Response resp(req, c.vc_,  st, out);
         auto resp_sock = c.s_;
