@@ -9,6 +9,7 @@
 #include <map>
 
 #include "request/request.hh"
+#include "config/config.hh"
 #include "request/types.hh"
 namespace http
 {
@@ -57,6 +58,9 @@ namespace http
         Response(const Request&, const STATUS_CODE& = STATUS_CODE::OK,
                     std::string body = "");
 
+        Response(const Request&, VHostConfig&, const STATUS_CODE& = STATUS_CODE::OK,
+                    std::string body = "");
+
         Response() = default;
         Response(const Response&) = default;
         Response& operator=(const Response&) = default;
@@ -75,5 +79,6 @@ namespace http
         STATUS_CODE status_;
         std::map<std::string, std::string> headers_;
         std::string msg_body_;
+        VHostConfig vc;
     };
 } // namespace http

@@ -35,27 +35,27 @@ namespace http
 
         if(st == 200)
         {
-            APM_add(http::APM, "global_requests_2xx");
-            APM_add(vc.APM_local, "requests_2xx");
+            apm.APM_add(apm.APM_, "global_requests_2xx");
+            apm.APM_add(vc.APM_local, "requests_2xx");
         }
         else if(st >= 400 && st < 500)
         {
-            APM_add(http::APM, "global_requests_4xx");
-            APM_add(vc.APM_local, "requests_4xx");
+            apm.APM_add(apm.APM_, "global_requests_4xx");
+            apm.APM_add(vc.APM_local, "requests_4xx");
         }
         else if(st >= 500 && st < SHOULD_NOT_HAPPEN)
         {
-            APM_add(http::APM, "global_requests_5xx");
-            APM_add(vc.APM_local, "requests_5xx");
+            apm.APM_add(apm.APM_, "global_requests_5xx");
+            apm.APM_add(vc.APM_local, "requests_5xx");
         }
-        APM_add(http::APM, "global_requests_nb");
-        APM_add(vc.APM_local, "requests_nb");
+        apm.APM_add(apm.APM_, "global_requests_nb");
+        apm.APM_add(vc.APM_local, "requests_nb");
 
     }
 
     void EventRequest::operator()()
     {
-        APM_add(http::APM, "global_connections_active");
+        apm.APM_add(apm.APM_, "global_connections_active");
         req_ = Request(sock_);
         //add to the register of sockets
         auto c = dispatcher.create_connection(*this);
@@ -105,11 +105,12 @@ namespace http
         {
             if(it->second == "alive" && res_.status_ == OK)
             {
-                APM_add(http::APM, "global_connections_active");
+                apm.APM_add(apm.APM_, "global_connections_active");
                 event_register.register_ew<EventRequest>(sock_);
             }
         }
-        APM_sub(http::APM, "global_connections_active");
+        apm.APM_sub(apm.APM_, "global_connections_active");
+        update_APM(res_.vc, res_.status_);
         event_register.unregister_ew((EventWatcher *) this);
     }
 }

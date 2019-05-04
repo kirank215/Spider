@@ -40,7 +40,7 @@ namespace http
 
     Request::Request(shared_socket new_socket)
     {
-        APM_add(http::APM, "global_connections_reading");
+        apm.APM_add(apm.APM_, "global_connections_reading");
         char buffer[4096]; //Ususally buffer lenght is 8kb
 
         long unsigned int header_size = 0;
@@ -112,6 +112,6 @@ namespace http
                 }
             }
         }
-        APM_sub(http::APM, "global_connections_reading");
+        apm.APM_sub(apm.APM_, "global_connections_reading");
     }
 }

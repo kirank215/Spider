@@ -34,11 +34,10 @@ namespace http
             st = NOT_FOUND;
         if(req.request_uri_ == c.vc_.health_endpoint)   // get on healthpoint returns the metrics
         {
-            nlohmann::json j_map(http::APM);
-            out = j_map.dump();
+            apm.APM_.insert(c.vc_.APM_local.begin(), c.vc_.APM_local.end());
+            nlohmann::json j_map(apm.APM_);
+            out = j_map.dump(4);
             out += "\n";
-            nlohmann::json apm_local = c.vc_.APM_local;
-            out += apm_local.dump();
             st = OK;
             // POST same as GET for now. Change for later stages
         }
@@ -51,8 +50,9 @@ namespace http
         {
             st = OK;
         }
-        Response resp(req, st, out);
+        Response resp(req, c.vc_,  st, out);
         auto resp_sock = c.s_;
         event_register.register_ew<EventResponse>(resp_sock, resp);
     }
+
 }

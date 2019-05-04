@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <map>
 #include "config/config.hh"
 #include "request/request.hh"
 #include "vhost/connection.hh"

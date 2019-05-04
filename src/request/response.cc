@@ -114,3 +114,10 @@ http::Response::Response(const Request& request, const STATUS_CODE& st,
             build_post();
     }
 }
+
+http::Response::Response(const Request& request, VHostConfig& v, const STATUS_CODE& st,
+                            std::string body)
+    : Response(request, st, body)
+{
+    this->vc = v;
+}
