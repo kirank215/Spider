@@ -43,6 +43,9 @@ namespace http
         shared_socket accept(sockaddr* addr, socklen_t* addrlen) final;
         void connect(const sockaddr*, socklen_t) final;
 
+        void set_host_name(const std::string&);
+
+
         int ssl_set_fd(int fd);
 
 
@@ -63,6 +66,8 @@ namespace http
          */
         std::unique_ptr<SSL, decltype(SSL_free)*> ssl_;
     };
+    int ServerNameCallback(SSL *ssl, int *ad, void *arg);
+
 } // namespace http
     std::shared_ptr<http::Socket>  create_SSLSocket(
                 const misc::AddrInfo&, const http::VHostConfig&);

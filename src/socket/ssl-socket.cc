@@ -1,6 +1,11 @@
 
 #include "socket/ssl-socket.hh"
 #include "misc/openssl/ssl.hh"
+<<<<<<< HEAD
+=======
+#include "config/config.hh"
+#include "vhost/dispatcher.hh"
+>>>>>>> SSL: server name iden
 
 
 
@@ -69,6 +74,43 @@ namespace http
     {
         // possibly check validity of cerificates before or at some point
         sys::connect(*fd_, addr, addrlen);
+    }
+
+    void SSLSocket::set_host_name(const std::string& hostname)
+    {
+        SSL_set_tlsext_host_name(ssl_.get(), hostname.c_str());
+    }
+
+     int ServerNameCallback(SSL *ssl, int *ad, void *arg)
+    {
+        ad = ad;
+        arg = arg;
+        if (ssl == NULL)
+            return SSL_TLSEXT_ERR_NOACK;
+
+        const char* servername = SSL_get_servername(ssl, TLSEXT_NAMETYPE_host_name);
+        if (!servername || servername[0] == '\0')
+            return SSL_TLSEXT_ERR_NOACK;
+
+        SSL_CTX* ctx = NULL;
+
+        // find ctx of this server
+        for(VHostConfig& vc : dispatcher.get_hosts().list_vhost)
+        {
+            if(vc.server_name == servername)
+            {
+                ctx = vc.ctx;
+                break;
+            }
+        }
+        if (ctx == NULL)
+            return SSL_TLSEXT_ERR_NOACK;
+
+        SSL_CTX* ret = SSL_set_SSL_CTX(ssl, ctx);
+        if (ret != ctx)
+            return SSL_TLSEXT_ERR_NOACK;
+
+        return SSL_TLSEXT_ERR_OK;
     }
 
     int SSLSocket::ssl_set_fd(int fd)

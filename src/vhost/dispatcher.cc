@@ -56,5 +56,10 @@ namespace http
                 vs->respond(req, c, 0, 0); // FIXME remaining iterator for respond
         }
     }
+
+    ServerConfig Dispatcher::get_hosts()
+    {
+        return hosts_;
+    }
     // add response function here that finds the static file of a vhost config and calls the respond function
 }
