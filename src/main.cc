@@ -16,12 +16,14 @@
 #include "vhost/dispatcher.hh"
 #include "vhost/vhost-static-file.hh"
 #include "vhost/vhost-factory.hh"
+#include "vhost/apm.hh"
 
 using namespace http;
 using namespace misc;
 
 EventWatcherRegistry http::event_register;
 Dispatcher http::dispatcher;
+APM http::apm;
 
 
 std::shared_ptr<Socket> create_SSLSocket(
@@ -111,16 +113,15 @@ int main(int argc, char *argv[])
 
         //     removed dead code here
 
-        //  XXX check if the socket is default or ssl!
 
         std::shared_ptr<Socket> sha_sock;
         if(vc.ctx == NULL)
             sha_sock = create_DefaultSocket(addrinfo);
         else
+        {
             sha_sock = create_SSLSocket(addrinfo, vc);
-        //           set server name
-        //         set sni callback
-        //       move accept from constructor to here
+            SSL_CTX_set_tlsext_servername_callback(vc.ctx, ServerNameCallback);
+        }
 
         for(auto &i : addrinfo)
         {

@@ -21,13 +21,7 @@ namespace http
         : Socket(fd), ssl_(SSL_new(ssl_ctx), SSL_free)
     {
         SSL_set_fd(ssl_.get(), *(this->fd_));
-        int accept = SSL_accept(ssl_.get());
-        if(accept < 0)
-        {
-            ERR_print_errors_fp(stderr);
-            int ret = SSL_get_error(ssl_.get(), accept);
-            std::cout << ret;
-        }
+        ssl::accept(ssl_.get());
     }
 
     ssize_t SSLSocket::recv(void* dst, size_t len)

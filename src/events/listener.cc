@@ -24,8 +24,15 @@ void http::ListenerEW::operator()()
 {
     sockaddr addr;
     socklen_t len = sizeof(addr);
-    auto new_socket = sock_->accept(&addr, &len);
-    http::event_register.register_ew<EventRequest>(new_socket);
-
+    try
+    {
+        auto new_socket = sock_->accept(&addr, &len);
+        http::event_register.register_ew<EventRequest>(new_socket);
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << e.what();
+        return;
+    }
 }
 
