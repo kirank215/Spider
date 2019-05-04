@@ -89,6 +89,7 @@ SOURCES = \
           src/vhost/vhost-static-file.hh \
           src/vhost/vhost-static-file.cc \
           src/vhost/vhost.hh \
+          src/vhost/apm.hh \
           $(NULL)
 
 # Compile source files again to avoid silenting undefined references.
