@@ -5,21 +5,21 @@ X : Not started
 
 Priority :
 
-Implement event loop                                                        [V]
-Implement listener                                                          [V]
-Implement requests                                                          [V]
+Implement event loop              [V]
+Implement listener                [V]
+Implement requests                [V]
 
---- Configuration file handling                                             [V]
+--- Configuration file handling   [V]
 
---- Event Loop                                                              [V]
+--- Event Loop                    [V]
 
---- Implementing Vhosts                                                     [O]
+--- Implementing Vhosts           [O]
 
---- Reverse Proxy                                                           [X]
+--- Reverse Proxy                 [X]
 
---- SSL Termination                                                         [X]
+--- SSL Termination               [X]
 
---- Authentication                                                          [X]
+--- Authentication                [X]
 
 
 -------- STEP 1 ----------
@@ -36,6 +36,7 @@ GRACEFUL EXIT       [V]
 <<<<<<< HEAD
 <<<<<<< HEAD
 -------- STEP 2 ----------
+<<<<<<< HEAD
 >>>>>>> Completed HTTPS, edit TODO
 =======
 
@@ -44,6 +45,9 @@ GRACEFUL EXIT       [V]
 -------- STEP 2 ----------
 >>>>>>> Updated TODO, not commited respective code as connot test
 NEW CONFIG FILE      []
+=======
+NEW CONFIG FILE      [V]
+>>>>>>> commit before pull
 MORE EXIT CODES      []
 REUSING CONNECTIONS  [V]
 DISPATCHER           [V]
