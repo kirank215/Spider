@@ -22,11 +22,13 @@ namespace fs = std::filesystem;
 namespace http
 {
 
+
     void build_html(std::string& output_string, std::string root)
     {
+        std::string abs = fs::absolute(root).c_str();
         output_string = "<!DOCTYPE html>\n<html>\n<head>";
         output_string += "\n<metacharset=utf-8>\n";
-        output_string += "<title>Index of" + root + "</title>" + "\n"
+        output_string += "<title>Index of" + abs + "</title>" + "\n"
                             + "</head>" + "\n" + "<body>" + "\n";
         output_string += "<ul>\n";
 
@@ -40,11 +42,11 @@ namespace http
             output_string += "</a></li>\n";
         }
 
-        output_string += "</ul>\n</body>\n</html>";
+        output_string += "</ul>\n</body>\n</html>\n";
     }
 
     VHostStaticFile::VHostStaticFile(const VHostConfig& v)
-    :VHost{v}
+        :VHost{v}
     {}
 
     void VHostStaticFile::respond(const Request& req, Connection c,
@@ -55,6 +57,7 @@ namespace http
         std::string out;
         std::error_code e;
         std::string content_type = "text/plain";
+        bool dir = fs::is_directory(path,e);
         if(req.request_uri_ == c.vc_.health_endpoint)   // get on healthpoint returns the metrics
         {
             apm.APM_.insert(c.vc_.APM_local.begin(), c.vc_.APM_local.end());
@@ -63,8 +66,7 @@ namespace http
             out += "\n";
             st = OK;
         }
-        else if(fs::is_directory(req.request_uri_, e) && c.vc_.auto_index
-                                        && c.vc_.default_file == "index.txt")
+        else if(dir && c.vc_.auto_index == true && c.vc_.default_file == "index.txt")
         {
             build_html(out, path);
             st = e ? OK : NOT_FOUND;
@@ -88,6 +90,13 @@ namespace http
             {
                 st = OK;
             }
+        }
+        auto pos = req.request_uri_.find('.');
+        if(pos != std::string::npos)
+        {
+            auto it = content_types.find(req.request_uri_.substr(pos+1));
+            if(it != content_types.end())
+                content_type = it->second;
         }
         Response resp(req, c.vc_,  st, out);
         resp.content_type = content_type;
