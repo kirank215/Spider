@@ -51,7 +51,7 @@ namespace http
         std::vector <std::string> auth_basic_users; //here
         std::string health_endpoint; //nn
         bool auto_index; //nn, not allowed if proxy
-        bool default_vhost; //nn, needs to be unique
+        bool default_vhost = false; //nn, needs to be unique
         SSL_CTX* ctx = NULL;
         std::map<std::string, int> APM_local;       // use functions defined in dispatcher, http namespace to edit vals
 

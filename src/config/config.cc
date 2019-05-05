@@ -99,6 +99,10 @@ namespace http
                     v.ip = elt["vhosts"][i]["ip"];
                     v.server_name = elt["vhosts"][i]["server_name"];
                     v.port = elt["vhosts"][i]["port"];
+
+                    if(elt["vhosts"][i]["auto_index"] != nullptr
+                                && elt["vhosts"][i]["auto_index"])
+                        v.auto_index = true;
                     if(elt["vhosts"][i]["proxy_pass"] != nullptr)
                     {
                         if ((elt["vhosts"][i]["proxy_pass"]["ip"].is_string()) &&

@@ -94,6 +94,8 @@ namespace http
     {
         std::string resp_str;
         build_statusline(resp_str, res_);
+        resp_str += "Content-Type: " + res_.content_type;
+        resp_str += "\r\n";
         add_headers(resp_str, res_.headers_);
         resp_str += res_.msg_body_;
         resp_str += "\r\n";
