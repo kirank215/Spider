@@ -47,4 +47,7 @@ namespace http
             void respond(const Request&, Connection, remaining_iterator,
                     remaining_iterator) final;
     };
+
+    void build_html(std::string&, std::string);
+
 } // namespace http

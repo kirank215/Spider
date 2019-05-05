@@ -79,6 +79,7 @@ namespace http
         STATUS_CODE status_;
         std::map<std::string, std::string> headers_;
         std::string msg_body_;
+        std::string content_type = "text/plain";
         VHostConfig vc;
     };
 } // namespace http
