@@ -135,9 +135,6 @@ int main(int argc, char *argv[])
         }
         sha_sock->listen(10);
 
-        http::Request::header_max_size = 8000;  // @Salome add this VHostCofig
-        http::Request::uri_max_size = 2000;     // values here after finishing
-        http::Request::payload_max_size = 2000;  // that part FIXME
 
         event_register.register_ew<ListenerEW>(sha_sock);
     }

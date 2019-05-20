@@ -36,7 +36,7 @@ namespace http
     void DefaultSocket::setsockopt(int level, int optname, int optval)
     {
         socklen_t len = sizeof(optval);
-        sys::setsockopt(*fd_, level, optname,(char*)&optval, len);
+        sys::setsockopt(*fd_, level, optname, (char*)&optval, len);
     }
     std::shared_ptr<Socket> DefaultSocket::accept(sockaddr* addr,
             socklen_t* addrlen)
