@@ -33,21 +33,10 @@ STATUS CODE         [V]
 GRACEFUL EXIT       [V]
 --------------------------
 
-<<<<<<< HEAD
-<<<<<<< HEAD
--------- STEP 2 ----------
-<<<<<<< HEAD
->>>>>>> Completed HTTPS, edit TODO
-=======
 
-=======
->>>>>>> TODO
 -------- STEP 2 ----------
->>>>>>> Updated TODO, not commited respective code as connot test
-NEW CONFIG FILE      []
-=======
+
 NEW CONFIG FILE      [V]
->>>>>>> commit before pull
 MORE EXIT CODES      []
 REUSING CONNECTIONS  [V]
 DISPATCHER           [V]
